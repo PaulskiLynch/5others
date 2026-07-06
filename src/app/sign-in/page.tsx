@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { isLocalDevAuthEnabled } from "@/lib/auth";
+import { getAuthenticatedUserEmail, isLocalDevAuthEnabled } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
 import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 
@@ -16,9 +17,15 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { next } = await searchParams;
   const brand = await getRequestBrandKey();
   const showDevAccess = isLocalDevAuthEnabled();
+  const destination = next ?? "/my-circle";
+  const authenticatedEmail = await getAuthenticatedUserEmail();
+
+  if (authenticatedEmail) {
+    redirect(destination);
+  }
 
   if (brand === "cardiobunny") {
-    return <CardioBunnySignInScreen next={next ?? "/my-circle"} />;
+    return <CardioBunnySignInScreen next={destination} />;
   }
 
   return (
@@ -35,7 +42,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           </p>
         </div>
 
-        <SignInForm next={next ?? "/my-circle"} />
+        <SignInForm next={destination} />
 
         {showDevAccess ? (
           <div className="dev-access-panel">
@@ -45,7 +52,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               temporary dev session to avoid email throttling.
             </p>
             <div className="cta-row">
-              <Link className="secondary-cta" href={`/dev-sign-in?next=${encodeURIComponent(next ?? "/my-circle")}`}>
+              <Link className="secondary-cta" href={`/dev-sign-in?next=${encodeURIComponent(destination)}`}>
                 Use local dev access
               </Link>
             </div>

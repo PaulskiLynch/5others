@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { CardioBunnyJoinScreen } from "@/components/cardio-bunny/CardioBunnyJoinScreen";
+import { getAuthenticatedUserEmail } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
 
 import {
@@ -13,6 +15,11 @@ import {
 
 export default async function Home() {
   const brand = await getRequestBrandKey();
+  const authenticatedEmail = await getAuthenticatedUserEmail();
+
+  if (authenticatedEmail) {
+    redirect("/my-circle");
+  }
 
   if (brand === "cardiobunny") {
     return <CardioBunnyJoinScreen />;
