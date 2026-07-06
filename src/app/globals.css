@@ -1400,6 +1400,7 @@ h3 {
 
 .cb-field select {
   appearance: none;
+  color-scheme: dark;
   background-image:
     linear-gradient(45deg, transparent 50%, rgba(255, 245, 235, 0.76) 50%),
     linear-gradient(135deg, rgba(255, 245, 235, 0.76) 50%, transparent 50%);
@@ -1408,6 +1409,11 @@ h3 {
     calc(100% - 18px) calc(50% - 2px);
   background-size: 7px 7px, 7px 7px;
   background-repeat: no-repeat;
+}
+
+.cb-field option {
+  background: #1b181d;
+  color: #f7f1ea;
 }
 
 .cb-field textarea {
