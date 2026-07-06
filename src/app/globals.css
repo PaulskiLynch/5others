@@ -1381,6 +1381,12 @@ h3 {
   font-size: 0.88rem;
 }
 
+.cb-field-note {
+  color: rgba(255, 245, 235, 0.6);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
 .cb-field input,
 .cb-field textarea,
 .cb-field select {

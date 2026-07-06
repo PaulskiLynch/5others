@@ -20,13 +20,14 @@ export function CardioBunnyJoinScreen({ error }: CardioBunnyJoinScreenProps) {
         <JoinHiddenFields />
 
         <label className="cb-field">
-          <span>Full name</span>
-          <input name="displayName" placeholder="What should we call you?" type="text" />
+          <span>What should we call you in your circle?</span>
+          <input name="displayName" placeholder="A name that feels comfortable to you" type="text" />
         </label>
 
         <label className="cb-field">
           <span>Email address</span>
           <input name="email" placeholder="Your email" required type="email" />
+          <small className="cb-field-note">Used only for sign-in and circle access. We never sell your data.</small>
         </label>
 
         <label className="cb-field">
