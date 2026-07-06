@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { isLocalDevAuthEnabled } from "@/lib/auth";
 import { requireAuthenticatedUserEmail } from "@/lib/auth";
+import { SignOutAction } from "@/components/auth/SignOutAction";
 import { CircleBottomNav } from "@/components/circle/CircleBottomNav";
 import { getMyCircleView } from "@/lib/circle";
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
@@ -49,11 +50,15 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                   {circle.memberCount} anonymous bunnies, {circle.category}
                 </span>
               </div>
-              <form action={showDevSignOut ? stopDeveloperSession : "/auth/sign-out"}>
-                <button className="phone-signout button-reset" type="submit">
-                  leave
-                </button>
-              </form>
+              {showDevSignOut ? (
+                <form action={stopDeveloperSession}>
+                  <button className="phone-signout button-reset" type="submit">
+                    leave
+                  </button>
+                </form>
+              ) : (
+                <SignOutAction className="phone-signout button-reset" redirectTo="/" />
+              )}
             </div>
 
             <div className="avatar-strip">

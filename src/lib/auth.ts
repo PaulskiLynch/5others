@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 const DEV_AUTH_COOKIE = "fiveothers-dev-email";
 
@@ -47,17 +46,15 @@ export async function getAuthenticatedUserEmail() {
     return developerEmail;
   }
 
-  const supabase = await getSupabaseServerClient();
+  const { userId } = await auth();
 
-  if (!supabase) {
+  if (!userId) {
     return null;
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await currentUser();
 
-  return user?.email ?? null;
+  return user?.primaryEmailAddress?.emailAddress?.toLowerCase() ?? null;
 }
 
 export async function requireAuthenticatedUserEmail() {

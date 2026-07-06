@@ -34,7 +34,7 @@ export default async function Home() {
           <p className="lede">{productDefinition}</p>
 
           <div className="cta-row">
-            <Link className="primary-cta" href="/sign-in">
+            <Link className="primary-cta" href="/sign-in?next=/my-circle">
               Open my circle
             </Link>
             <Link className="secondary-cta" href="/join">

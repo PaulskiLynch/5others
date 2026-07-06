@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SignIn } from "@clerk/nextjs";
 
+import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 import { getAuthenticatedUserEmail, isLocalDevAuthEnabled } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
-import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
-
-import { SignInForm } from "./SignInForm";
 
 type SignInPageProps = {
   searchParams: Promise<{
@@ -33,23 +32,25 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <section className="panel panel-form">
         <div className="split-head">
           <div>
-            <p className="section-label">Magic Link Sign-In</p>
+            <p className="section-label">Private Sign-In</p>
             <h1 className="page-title">Enter quietly. No account performance required.</h1>
           </div>
           <p className="supporting-copy">
-            We use email magic links for Phase 1 so each member can return to her own
-            private circle without passwords or public profiles.
+            Clerk manages the session layer so members can return to their private circle
+            without wrestling with repeated email prompts.
           </p>
         </div>
 
-        <SignInForm next={destination} />
+        <div className="clerk-shell">
+          <SignIn forceRedirectUrl={destination} path="/sign-in" routing="path" signUpUrl="/sign-in" />
+        </div>
 
         {showDevAccess ? (
           <div className="dev-access-panel">
             <p className="section-label">Local Development Shortcut</p>
             <p className="supporting-copy">
-              Magic links are still the real path, but local development can use a
-              temporary dev session to avoid email throttling.
+              Clerk is now the real path, but local development can still use a temporary
+              session shortcut when we need to test quickly.
             </p>
             <div className="cta-row">
               <Link className="secondary-cta" href={`/dev-sign-in?next=${encodeURIComponent(destination)}`}>

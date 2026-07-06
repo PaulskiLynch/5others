@@ -1971,6 +1971,16 @@ h3 {
   line-height: 1.45;
 }
 
+.clerk-shell {
+  display: grid;
+  justify-items: center;
+  margin-top: 18px;
+}
+
+.clerk-shell-cardiobunny {
+  margin-top: 8px;
+}
+
 @media (max-width: 920px) {
   .hero-grid,
   .split-head,

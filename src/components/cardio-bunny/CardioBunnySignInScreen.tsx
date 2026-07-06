@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { SignIn } from "@clerk/nextjs";
 
 import { isLocalDevAuthEnabled } from "@/lib/auth";
-import { SignInForm } from "@/app/sign-in/SignInForm";
 
 import { CardioBunnyEntryShell } from "./CardioBunnyEntryShell";
 
@@ -14,10 +14,12 @@ export function CardioBunnySignInScreen({ next }: CardioBunnySignInScreenProps) 
 
   return (
     <CardioBunnyEntryShell
-      cardSubtitle="Use your email magic link to return quietly."
+      cardSubtitle="Use a calmer sign-in flow that remembers you properly."
       cardTitle="Enter this week&apos;s circle"
     >
-      <SignInForm next={next} theme="cardiobunny" />
+      <div className="clerk-shell clerk-shell-cardiobunny">
+        <SignIn forceRedirectUrl={next} path="/sign-in" routing="path" signUpUrl="/sign-in" />
+      </div>
 
       {showDevAccess ? (
         <div className="cb-dev-panel">

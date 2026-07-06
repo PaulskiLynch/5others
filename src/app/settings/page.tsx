@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
 import { CircleBottomNav } from "@/components/circle/CircleBottomNav";
+import { SignOutAction } from "@/components/auth/SignOutAction";
 import { isLocalDevAuthEnabled, requireAuthenticatedUserEmail } from "@/lib/auth";
 
 export default async function SettingsPage() {
@@ -67,11 +68,15 @@ export default async function SettingsPage() {
                   <strong>Leave this session</strong>
                   <span>Step out without deleting your access.</span>
                 </div>
-                <form action={showDevSignOut ? stopDeveloperSession : "/auth/sign-out"}>
-                  <button className="settings-link button-reset" type="submit">
-                    Sign out
-                  </button>
-                </form>
+                {showDevSignOut ? (
+                  <form action={stopDeveloperSession}>
+                    <button className="settings-link button-reset" type="submit">
+                      Sign out
+                    </button>
+                  </form>
+                ) : (
+                  <SignOutAction className="settings-link button-reset" />
+                )}
               </div>
             </section>
           </div>

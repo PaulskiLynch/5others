@@ -2,7 +2,6 @@ import { revalidatePath } from "next/cache";
 
 import { getDeveloperEmailOverride } from "@/lib/auth";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { generateWeeklyPseudonym } from "@/lib/pseudonyms";
 import { getTimezoneBandLabel, getUpcomingWeekWindow } from "@/lib/week";
 
@@ -436,24 +435,17 @@ async function ensureCircleForUser(user: AppUserRow) {
 
 async function getCircleReadClient(email: string) {
   const developerEmail = await getDeveloperEmailOverride();
+  const adminClient = getSupabaseAdminClient();
+
+  if (!adminClient) {
+    throw new Error("Supabase admin client is not configured.");
+  }
 
   if (developerEmail && developerEmail === normalizeEmail(email)) {
-    const adminClient = getSupabaseAdminClient();
-
-    if (!adminClient) {
-      throw new Error("Supabase admin client is not configured.");
-    }
-
     return adminClient;
   }
 
-  const serverClient = await getSupabaseServerClient();
-
-  if (!serverClient) {
-    throw new Error("Supabase server client is not configured.");
-  }
-
-  return serverClient;
+  return adminClient;
 }
 
 export async function getMyCircleView(email: string): Promise<CircleViewModel> {
