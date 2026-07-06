@@ -1186,7 +1186,10 @@ h3 {
 }
 
 .cb-story-column {
+  width: 100%;
+  max-width: 36rem;
   padding-top: 4px;
+  justify-self: end;
 }
 
 .cb-brand-lockup {
@@ -1327,7 +1330,7 @@ h3 {
 .cb-form-card {
   width: 100%;
   max-width: 500px;
-  justify-self: stretch;
+  justify-self: start;
   padding: 42px 38px 34px;
   border-radius: 30px;
   border: 1px solid rgba(255, 251, 245, 0.12);
@@ -1580,6 +1583,7 @@ h3 {
 
   .cb-form-card {
     max-width: none;
+    justify-self: stretch;
     padding: 28px 22px 26px;
   }
 
