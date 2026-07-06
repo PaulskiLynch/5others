@@ -1,17 +1,12 @@
 import { submitPilotIntake } from "@/app/join/actions";
 import { JoinHiddenFields } from "@/app/join/JoinHiddenFields";
+import { ageRanges, preferredLanguages, startingPoints } from "@/lib/product";
 
 import { CardioBunnyEntryShell } from "./CardioBunnyEntryShell";
 
 type CardioBunnyJoinScreenProps = {
   error?: string;
 };
-
-const startingPointOptions = [
-  { value: "restarting", label: "Restarting after a break" },
-  { value: "building_consistency", label: "Building consistency" },
-  { value: "already_active", label: "Already active, staying steady" },
-] as const;
 
 export function CardioBunnyJoinScreen({ error }: CardioBunnyJoinScreenProps) {
   return (
@@ -35,11 +30,37 @@ export function CardioBunnyJoinScreen({ error }: CardioBunnyJoinScreenProps) {
         </label>
 
         <label className="cb-field">
-          <span>Your biggest goal right now</span>
+          <span>Preferred language</span>
+          <select defaultValue="en" name="preferredLanguage" required>
+            {preferredLanguages.map((language) => (
+              <option key={language} value={language}>
+                {language === "en" ? "English" : "Polish"}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="cb-field">
+          <span>Age group</span>
+          <select defaultValue="30-44" name="ageRange" required>
+            {ageRanges.map((ageRange) => (
+              <option key={ageRange} value={ageRange}>
+                {ageRange}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="cb-field">
+          <span>Where are you starting from right now?</span>
           <select name="startingPoint" defaultValue="restarting" required>
-            {startingPointOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {startingPoints.map((startingPoint) => (
+              <option key={startingPoint} value={startingPoint}>
+                {startingPoint === "restarting"
+                  ? "Restarting after a break"
+                  : startingPoint === "building_consistency"
+                    ? "Building consistency"
+                    : "Already active, staying steady"}
               </option>
             ))}
           </select>
