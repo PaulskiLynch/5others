@@ -143,3 +143,21 @@ create index if not exists safety_events_status_idx on safety_events (status, cr
 
 comment on table pilot_intake_requests is
 'Temporary seed-cohort intake bridge while magic-link auth is still being wired.';
+
+create table if not exists notification_deliveries (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  cohort text not null default 'cardiobunny',
+  notification_type text not null,
+  week_start date not null,
+  status text not null default 'sent',
+  provider text not null default 'resend',
+  provider_message_id text,
+  error_message text,
+  preview_payload jsonb,
+  created_at timestamptz not null default now(),
+  unique (email, notification_type, week_start)
+);
+
+create index if not exists notification_deliveries_week_idx
+  on notification_deliveries (notification_type, week_start, created_at);
