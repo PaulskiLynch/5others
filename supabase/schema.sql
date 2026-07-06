@@ -127,6 +127,7 @@ create table if not exists pilot_intake_requests (
   age_range text not null default '30-44',
   starting_point text not null default 'restarting',
   support_style text not null default 'gentle_accountability',
+  fitness_goal text,
   goal text not null,
   timezone_band text not null default 'UTC+0 to UTC+2',
   week_start date not null,

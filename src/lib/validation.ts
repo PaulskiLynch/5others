@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   ageRanges,
+  fitnessGoals,
   launchCategories,
   launchCohorts,
   preferredLanguages,
@@ -19,6 +20,10 @@ export const intakeRequestSchema = z.object({
   ageRange: z.enum(ageRanges),
   startingPoint: z.enum(startingPoints),
   supportStyle: z.enum(supportStyles),
+  fitnessGoal: z
+    .union([z.enum(fitnessGoals), z.literal("")])
+    .transform((value) => (value === "" ? undefined : value))
+    .optional(),
   goal: z.string().trim().min(12).max(240),
   acceptsSafety: z.literal(true),
   acceptsNoDmRule: z.literal(true),

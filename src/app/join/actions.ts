@@ -15,6 +15,7 @@ export async function submitPilotIntake(formData: FormData) {
     ageRange: String(formData.get("ageRange") ?? ""),
     startingPoint: String(formData.get("startingPoint") ?? ""),
     supportStyle: String(formData.get("supportStyle") ?? ""),
+    fitnessGoal: String(formData.get("fitnessGoal") ?? ""),
     goal: String(formData.get("goal") ?? ""),
     acceptsSafety: formData.get("acceptsSafety") === "on",
     acceptsNoDmRule: formData.get("acceptsNoDmRule") === "on",

@@ -58,6 +58,7 @@ export async function createPilotIntakeRequest(
     age_range: parsed.data.ageRange,
     starting_point: parsed.data.startingPoint,
     support_style: parsed.data.supportStyle,
+    fitness_goal: parsed.data.fitnessGoal ?? null,
     goal: parsed.data.goal,
     timezone_band: timezoneBand,
     week_start: weekStart,

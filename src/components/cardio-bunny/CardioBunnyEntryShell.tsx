@@ -11,17 +11,17 @@ const supportNotes = [
   {
     icon: "OO",
     title: "Five others, just like you",
-    body: "You'll be matched with 5 people on a similar path.",
+    body: "Matched with 5 other Cardio Bunnies on a similar path.",
   },
   {
     icon: "[]",
     title: "Real conversations",
-    body: "Share wins, challenges, and what you're learning.",
+    body: "A safe space to share your fitness wins, challenges, and heart-health journey.",
   },
   {
     icon: "<3",
     title: "Weekly support",
-    body: "A short check-in. A lot of impact. Every single week.",
+    body: "A 2-minute weekly check-in that keeps you accountable to yourself.",
   },
 ] as const;
 
@@ -49,7 +49,7 @@ export function CardioBunnyEntryShell({
             <p className="cb-kicker">A weekly circle for real support</p>
             <h1 className="cb-hero-title">You don&apos;t have to do this alone.</h1>
             <p className="cb-hero-copy">
-              Join 5 others for honest check-ins, real encouragement, and gentle accountability.
+              Join a Cardio Bunny circle for real, heart-centered support.
             </p>
             <p className="cb-hero-highlight">One week. One circle. You belong here.</p>
 

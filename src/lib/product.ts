@@ -51,6 +51,15 @@ export type SupportStyle = (typeof supportStyles)[number];
 export const preferredLanguages = ["en", "pl"] as const;
 export type PreferredLanguage = (typeof preferredLanguages)[number];
 
+export const fitnessGoals = [
+  "weight_loss",
+  "endurance",
+  "general_health",
+  "heart_health",
+  "consistency",
+] as const;
+export type FitnessGoal = (typeof fitnessGoals)[number];
+
 export const weeklyLifecycle = [
   {
     time: "Sunday 18:00",
