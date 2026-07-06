@@ -1180,15 +1180,13 @@ h3 {
 
 .cb-entry-grid {
   display: grid;
-  grid-template-columns: minmax(0, 560px) minmax(380px, 500px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 48px;
   align-items: start;
-  justify-content: space-between;
 }
 
 .cb-story-column {
   padding-top: 4px;
-  max-width: 560px;
 }
 
 .cb-brand-lockup {
@@ -1327,6 +1325,9 @@ h3 {
 }
 
 .cb-form-card {
+  width: 100%;
+  max-width: 500px;
+  justify-self: stretch;
   padding: 42px 38px 34px;
   border-radius: 30px;
   border: 1px solid rgba(255, 251, 245, 0.12);
@@ -1578,6 +1579,7 @@ h3 {
   }
 
   .cb-form-card {
+    max-width: none;
     padding: 28px 22px 26px;
   }
 
