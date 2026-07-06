@@ -1180,21 +1180,23 @@ h3 {
 
 .cb-entry-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(380px, 520px);
-  gap: 56px;
+  grid-template-columns: minmax(0, 560px) minmax(380px, 500px);
+  gap: 48px;
   align-items: start;
+  justify-content: space-between;
 }
 
 .cb-story-column {
   padding-top: 4px;
+  max-width: 560px;
 }
 
 .cb-brand-lockup {
-  margin-bottom: 26px;
+  margin-bottom: 20px;
 }
 
 .cb-brand-image {
-  width: min(100%, 310px);
+  width: min(100%, 270px);
   height: auto;
   display: block;
   filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.35));
@@ -1210,33 +1212,33 @@ h3 {
 }
 
 .cb-kicker {
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   color: rgba(255, 241, 223, 0.7);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .cb-hero-title {
-  max-width: 9ch;
+  max-width: 8ch;
   margin: 0;
   color: #f8f2eb;
-  font-size: clamp(2.7rem, 5vw, 4.3rem);
-  line-height: 1;
+  font-size: clamp(2.15rem, 3.9vw, 3.45rem);
+  line-height: 0.98;
 }
 
 .cb-hero-copy {
-  max-width: 20ch;
-  margin: 20px 0 0;
+  max-width: 19ch;
+  margin: 16px 0 0;
   color: rgba(255, 247, 239, 0.76);
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  line-height: 1.52;
+  font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+  line-height: 1.46;
 }
 
 .cb-hero-highlight {
-  margin: 18px 0 0;
+  margin: 14px 0 0;
   color: #e4b246;
-  font-size: clamp(1.02rem, 1.7vw, 1.25rem);
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
   line-height: 1.4;
 }
 
