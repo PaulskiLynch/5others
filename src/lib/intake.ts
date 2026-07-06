@@ -22,6 +22,37 @@ export type IntakeResult =
       error: string;
     };
 
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
+export async function getLatestPilotIntakeRequest(email: string) {
+  const supabase = getSupabaseAdminClient();
+
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("pilot_intake_requests")
+    .select("*")
+    .eq("email", normalizeEmail(email))
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function hasPilotIntakeRequest(email: string) {
+  const intake = await getLatestPilotIntakeRequest(email);
+  return Boolean(intake);
+}
+
 export async function createPilotIntakeRequest(
   input: Record<string, unknown>
 ): Promise<IntakeResult> {
@@ -49,7 +80,7 @@ export async function createPilotIntakeRequest(
   }
 
   const { error } = await supabase.from("pilot_intake_requests").insert({
-    email: parsed.data.email,
+    email: normalizeEmail(parsed.data.email),
     timezone: parsed.data.timezone,
     locale: parsed.data.locale,
     preferred_language: parsed.data.preferredLanguage,

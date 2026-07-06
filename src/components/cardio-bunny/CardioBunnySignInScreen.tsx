@@ -14,7 +14,7 @@ export function CardioBunnySignInScreen({ next }: CardioBunnySignInScreenProps) 
 
   return (
     <CardioBunnyEntryShell
-      cardSubtitle="Use a calmer sign-in flow that remembers you properly."
+      cardSubtitle="Sign in first, then we&apos;ll ask a few quiet matching questions."
       cardTitle="Enter this week&apos;s circle"
     >
       <div className="clerk-shell clerk-shell-cardiobunny">

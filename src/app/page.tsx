@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CardioBunnyJoinScreen } from "@/components/cardio-bunny/CardioBunnyJoinScreen";
+import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 import { getAuthenticatedUserEmail } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
+import { hasPilotIntakeRequest } from "@/lib/intake";
+import { withNext } from "@/lib/navigation";
 
 import {
   antiFeatures,
@@ -18,11 +20,12 @@ export default async function Home() {
   const authenticatedEmail = await getAuthenticatedUserEmail();
 
   if (authenticatedEmail) {
-    redirect("/my-circle");
+    const hasIntake = await hasPilotIntakeRequest(authenticatedEmail);
+    redirect(hasIntake ? "/my-circle" : "/onboarding");
   }
 
   if (brand === "cardiobunny") {
-    return <CardioBunnyJoinScreen />;
+    return <CardioBunnySignInScreen next={withNext("/continue", "/my-circle")} />;
   }
 
   return (

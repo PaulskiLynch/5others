@@ -5,6 +5,8 @@ import { SignIn } from "@clerk/nextjs";
 import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 import { getAuthenticatedUserEmail, isLocalDevAuthEnabled } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
+import { hasPilotIntakeRequest } from "@/lib/intake";
+import { isSafeInternalPath, withNext } from "@/lib/navigation";
 
 type SignInPageProps = {
   searchParams: Promise<{
@@ -16,15 +18,21 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { next } = await searchParams;
   const brand = await getRequestBrandKey();
   const showDevAccess = isLocalDevAuthEnabled();
-  const destination = next ?? "/my-circle";
+  const destination = next && isSafeInternalPath(next) ? next : "/my-circle";
+  const handoff = withNext("/continue", destination);
   const authenticatedEmail = await getAuthenticatedUserEmail();
 
   if (authenticatedEmail) {
-    redirect(destination);
+    if (destination.startsWith("/admin")) {
+      redirect(destination);
+    }
+
+    const hasIntake = await hasPilotIntakeRequest(authenticatedEmail);
+    redirect(hasIntake ? destination : withNext("/onboarding", destination));
   }
 
   if (brand === "cardiobunny") {
-    return <CardioBunnySignInScreen next={destination} />;
+    return <CardioBunnySignInScreen next={handoff} />;
   }
 
   return (
@@ -42,7 +50,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         </div>
 
         <div className="clerk-shell">
-          <SignIn forceRedirectUrl={destination} path="/sign-in" routing="path" signUpUrl="/sign-in" />
+          <SignIn forceRedirectUrl={handoff} path="/sign-in" routing="path" signUpUrl="/sign-in" />
         </div>
 
         {showDevAccess ? (
@@ -53,7 +61,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               session shortcut when we need to test quickly.
             </p>
             <div className="cta-row">
-              <Link className="secondary-cta" href={`/dev-sign-in?next=${encodeURIComponent(destination)}`}>
+              <Link className="secondary-cta" href={`/dev-sign-in?next=${encodeURIComponent(handoff)}`}>
                 Use local dev access
               </Link>
             </div>

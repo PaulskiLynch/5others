@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { withNext } from "@/lib/navigation";
 
 const DEV_AUTH_COOKIE = "fiveothers-dev-email";
 
@@ -61,7 +62,7 @@ export async function requireAuthenticatedUserEmail() {
   const email = await getAuthenticatedUserEmail();
 
   if (!email) {
-    redirect("/sign-in?next=/my-circle");
+    redirect(withNext("/sign-in", "/my-circle"));
   }
 
   return email;
@@ -78,13 +79,13 @@ export async function requireAdminUserEmail() {
   const email = await getAuthenticatedUserEmail();
 
   if (!email) {
-    redirect("/sign-in?next=/admin");
+    redirect(withNext("/sign-in", "/admin"));
   }
 
   const configuredAdminEmails = getConfiguredAdminEmails();
 
   if (configuredAdminEmails.length > 0 && !configuredAdminEmails.includes(email.toLowerCase())) {
-    redirect("/sign-in?next=/admin&error=admin_only");
+    redirect("/sign-in?next=%2Fadmin&error=admin_only");
   }
 
   return email;

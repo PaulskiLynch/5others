@@ -5,7 +5,9 @@ import { requireAuthenticatedUserEmail } from "@/lib/auth";
 import { SignOutAction } from "@/components/auth/SignOutAction";
 import { CircleBottomNav } from "@/components/circle/CircleBottomNav";
 import { getMyCircleView } from "@/lib/circle";
+import { hasPilotIntakeRequest } from "@/lib/intake";
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
+import { redirect } from "next/navigation";
 
 import { sendCircleMessage } from "./actions";
 
@@ -17,7 +19,13 @@ type MyCirclePageProps = {
 
 export default async function MyCirclePage({ searchParams }: MyCirclePageProps) {
   const email = await requireAuthenticatedUserEmail();
+  const hasIntake = await hasPilotIntakeRequest(email);
   const { error } = await searchParams;
+
+  if (!hasIntake) {
+    redirect("/onboarding?next=/my-circle");
+  }
+
   const circle = await getMyCircleView(email);
   const showDevSignOut = isLocalDevAuthEnabled();
 
