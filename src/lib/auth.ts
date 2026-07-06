@@ -69,3 +69,26 @@ export async function requireAuthenticatedUserEmail() {
 
   return email;
 }
+
+function getConfiguredAdminEmails() {
+  return (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+export async function requireAdminUserEmail() {
+  const email = await getAuthenticatedUserEmail();
+
+  if (!email) {
+    redirect("/sign-in?next=/admin");
+  }
+
+  const configuredAdminEmails = getConfiguredAdminEmails();
+
+  if (configuredAdminEmails.length > 0 && !configuredAdminEmails.includes(email.toLowerCase())) {
+    redirect("/sign-in?next=/admin&error=admin_only");
+  }
+
+  return email;
+}

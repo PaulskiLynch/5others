@@ -1762,6 +1762,215 @@ h3 {
   margin-top: 20px;
 }
 
+.admin-page-shell {
+  min-height: 100vh;
+  padding: 36px 20px 72px;
+  background:
+    radial-gradient(circle at top left, rgba(228, 178, 70, 0.08), transparent 24%),
+    linear-gradient(180deg, #0c0b0f 0%, #141217 52%, #101015 100%);
+  color: #f7f1ea;
+}
+
+.admin-page-shell > * {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.admin-page-shell > * + * {
+  margin-top: 22px;
+}
+
+.admin-hero,
+.admin-card {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+    rgba(21, 19, 24, 0.96);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.admin-hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 30px;
+}
+
+.admin-kicker,
+.admin-section-label,
+.admin-hero-note span,
+.admin-field span {
+  margin: 0 0 10px;
+  color: #e4b246;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.admin-hero h1,
+.admin-card h2 {
+  margin: 0;
+  color: #fbf5ee;
+}
+
+.admin-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+}
+
+.admin-copy {
+  max-width: 44rem;
+  margin: 14px 0 0;
+  color: rgba(247, 241, 234, 0.72);
+  font-size: 1rem;
+  line-height: 1.58;
+}
+
+.admin-copy-tight {
+  max-width: 30rem;
+  margin-top: 0;
+}
+
+.admin-hero-note {
+  min-width: 240px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admin-hero-note span {
+  display: block;
+}
+
+.admin-hero-note strong {
+  color: #fbf5ee;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.admin-banner {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.admin-card {
+  padding: 24px 24px 22px;
+}
+
+.admin-card-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 18px;
+}
+
+.admin-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-metric-card {
+  padding: 16px 16px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(228, 178, 70, 0.1);
+}
+
+.admin-metric-card span {
+  display: block;
+  color: rgba(247, 241, 234, 0.64);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.admin-metric-card strong {
+  display: block;
+  margin-top: 8px;
+  color: #fbf5ee;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.admin-run-form {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+}
+
+.admin-field {
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.admin-field span {
+  margin: 0;
+}
+
+.admin-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #f7f1ea;
+  font: inherit;
+}
+
+.admin-primary {
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #efc55a 0%, #d8a83b 100%);
+  color: #1e1608;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table th {
+  color: #e4b246;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  color: rgba(247, 241, 234, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 @media (max-width: 920px) {
   .hero-grid,
   .split-head,
@@ -1786,6 +1995,18 @@ h3 {
 
   .cb-waiting-story {
     padding: 0;
+  }
+
+  .admin-hero,
+  .admin-card-head,
+  .admin-run-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-grid,
+  .admin-metric-grid {
+    grid-template-columns: 1fr;
   }
 
   .cb-brand-lockup {
