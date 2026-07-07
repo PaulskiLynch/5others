@@ -1613,8 +1613,8 @@ h3 {
 
 .circle-demo-reply-preview,
 .circle-demo-replying {
-  border-left: 2px solid rgba(125, 79, 18, 0.34);
-  background: rgba(255, 255, 255, 0.22);
+  border-left: 2px solid rgba(214, 168, 86, 0.28);
+  background: rgba(255, 255, 255, 0.36);
 }
 
 .circle-demo-reply-preview {
@@ -1626,7 +1626,7 @@ h3 {
 .circle-demo-reply-author,
 .circle-demo-replying-label {
   margin: 0;
-  color: rgba(72, 47, 18, 0.9);
+  color: rgba(112, 78, 28, 0.82);
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 0.66rem;
   font-weight: 700;
@@ -1636,7 +1636,7 @@ h3 {
 .circle-demo-reply-copy,
 .circle-demo-replying-copy {
   margin: 3px 0 0;
-  color: rgba(50, 36, 24, 0.76);
+  color: rgba(88, 66, 38, 0.72);
   font-size: 0.72rem;
   line-height: 1.35;
 }
