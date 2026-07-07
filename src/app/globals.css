@@ -1008,7 +1008,6 @@ h3 {
   border: 1px solid rgba(255, 245, 235, 0.1);
   border-radius: 18px;
   background: rgba(24, 20, 24, 0.96);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.32);
 }
 
 .circle-menu-link {
@@ -1049,9 +1048,6 @@ h3 {
   border: 1px solid rgba(255, 246, 236, 0.08);
   background: #2a2028;
   color: #fff7f2;
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .circle-room-context {
@@ -1225,7 +1221,6 @@ h3 {
   max-width: 68%;
   padding: 7px 10px 6px;
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .circle-note-peer {
