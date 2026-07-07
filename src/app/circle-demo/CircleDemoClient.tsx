@@ -96,6 +96,8 @@ const memberStatuses = [
   { author: "You", src: "/demo-bunnies/bunny-2.png" },
 ] as const;
 
+const activeTodayAuthors = new Set(memberStatuses.map((member) => member.author));
+
 const mentionDirectory = new Map([
   ["silverbunny", "SilverBunny"],
   ["gentlebunny", "GentleBunny"],
@@ -411,7 +413,7 @@ export function CircleDemoClient() {
         <div className="circle-demo-phone">
           <header className="circle-demo-topbar">
             <Link aria-label="Back" className="circle-demo-iconbutton" href="/">
-              <span aria-hidden="true">Back</span>
+              <span aria-hidden="true">☰</span>
             </Link>
 
             <div className="circle-demo-heading">
@@ -421,23 +423,19 @@ export function CircleDemoClient() {
             </div>
 
             <Link aria-label="Settings" className="circle-demo-iconbutton" href="/settings">
-              <span aria-hidden="true">Menu</span>
+              <span aria-hidden="true">⚙</span>
             </Link>
           </header>
-
-          <div className="circle-demo-utility">
-            <button className="circle-demo-reset button-reset" onClick={handleResetDemo} type="button">
-              Reset demo
-            </button>
-          </div>
 
           <div className="circle-demo-members" aria-label="Circle members">
             {memberStatuses.map((member) => (
               <span
                 className={`circle-demo-member ${seenTodayAuthors.has(member.author) ? "circle-demo-member-active" : ""}`}
                 key={member.author}
+                title={member.author}
               >
-                <Image alt="" className="circle-demo-member-image" height={28} src={member.src} width={28} />
+                <Image alt="" className="circle-demo-member-image" height={56} src={member.src} width={56} />
+                {activeTodayAuthors.has(member.author) ? <span className="circle-demo-member-dot" /> : null}
               </span>
             ))}
           </div>
@@ -473,13 +471,6 @@ export function CircleDemoClient() {
                   <p className="circle-demo-time">{message.time}</p>
 
                   <div className="circle-support-row">
-                    <button
-                      className="circle-support-pill button-reset"
-                      onClick={() => handleReply(index)}
-                      type="button"
-                    >
-                      <span className="circle-support-pill-label">Reply</span>
-                    </button>
                     {(["heart", "hug", "support"] as const).map((kind) => (
                       <button
                         className={`circle-support-pill circle-support-pill-icon button-reset ${
@@ -494,7 +485,7 @@ export function CircleDemoClient() {
                         type="button"
                       >
                         <span aria-hidden="true" className="circle-support-pill-iconmark">
-                          {kind === "heart" ? "\u2665" : kind === "hug" ? "\u2726" : "\u2600"}
+                          {kind === "heart" ? "♥" : kind === "hug" ? "✦" : "✳"}
                         </span>
                         <span className="sr-only">
                           {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
@@ -502,6 +493,13 @@ export function CircleDemoClient() {
                         <span className="circle-support-pill-count">{message.supports[kind]}</span>
                       </button>
                     ))}
+                    <button
+                      className="circle-support-pill circle-support-pill-reply button-reset"
+                      onClick={() => handleReply(index)}
+                      type="button"
+                    >
+                      <span className="circle-support-pill-label">Reply</span>
+                    </button>
                   </div>
                 </div>
               </article>
@@ -537,7 +535,7 @@ export function CircleDemoClient() {
                     updateMentionState(event.currentTarget.value, event.currentTarget.selectionStart)
                   }
                   onKeyDown={handleComposerKeyDown}
-                  placeholder="Share something small. What can you honestly do today?"
+                  placeholder="Share something small..."
                   ref={textareaRef}
                   rows={1}
                   value={draft}
@@ -558,9 +556,16 @@ export function CircleDemoClient() {
                 ) : null}
               </div>
               <button aria-label="Send" className="circle-demo-send" type="submit">
-                <span aria-hidden="true">Send</span>
+                <span aria-hidden="true">↑</span>
               </button>
             </form>
+
+            <div className="circle-demo-footerline">
+              <button className="circle-demo-reset button-reset" onClick={handleResetDemo} type="button">
+                Reset demo
+              </button>
+              <p>Small steps. Shared strength.</p>
+            </div>
           </section>
         </div>
       </section>
