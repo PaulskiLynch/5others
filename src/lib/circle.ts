@@ -36,6 +36,16 @@ type MessageRow = {
   created_at: string;
 };
 
+type SupportReactionKind = "heart" | "hug" | "support";
+
+type SupportReactionRow = {
+  id: string;
+  message_id: string;
+  membership_id: string;
+  kind: SupportReactionKind;
+  created_at: string;
+};
+
 export type CircleViewModel = {
   category: string;
   checkedInTodayCount: number;
@@ -48,6 +58,7 @@ export type CircleViewModel = {
     MembershipRow & {
       hasPostedToday: boolean;
       isYou: boolean;
+      mentionAlias: string;
     }
   >;
   messages: Array<
@@ -56,6 +67,13 @@ export type CircleViewModel = {
       accentColor: string;
       groupedWithPrevious: boolean;
       isOwn: boolean;
+      supports: Record<
+        SupportReactionKind,
+        {
+          count: number;
+          reacted: boolean;
+        }
+      >;
       tone: "blush" | "porcelain";
       relativeTime: string;
     }
@@ -124,6 +142,15 @@ function isUniqueViolation(error: unknown) {
   );
 }
 
+function isMissingRelationError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: string }).code === "42P01"
+  );
+}
+
 function formatMessageTime(value: string, timeZone: string) {
   return new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
@@ -159,6 +186,15 @@ function buildDisplayNameMap(
   }
 
   return map;
+}
+
+function buildMentionAlias(displayName: string) {
+  const base = displayName.replace(/cottontail/gi, "Bunny").replace(/[^a-zA-Z0-9 ]/g, "");
+  return base
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => `${part.slice(0, 1).toUpperCase()}${part.slice(1)}`)
+    .join("");
 }
 
 async function getLatestIntake(email: string) {
@@ -592,8 +628,28 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
     throw messagesError;
   }
 
+  const messageIds = (messages ?? []).map((message) => message.id);
+  const { data: supportReactions, error: supportReactionsError } = messageIds.length
+    ? await supabase
+        .from("message_support_reactions")
+        .select("*")
+        .in("message_id", messageIds)
+    : { data: [], error: null };
+
+  if (supportReactionsError) {
+    if (!isMissingRelationError(supportReactionsError)) {
+      throw supportReactionsError;
+    }
+  }
+
   const membershipById = new Map(membershipRows.map((membership) => [membership.id, membership]));
   const displayNameByMembershipId = buildDisplayNameMap(membershipRows, appUser.id);
+  const mentionAliasByMembershipId = new Map(
+    membershipRows.map((membership) => {
+      const displayName = displayNameByMembershipId.get(membership.id) ?? membership.pseudonym;
+      return [membership.id, buildMentionAlias(displayName)];
+    })
+  );
   const timeZone = intake?.timezone ?? user.timezone ?? "UTC";
   const todayKey = getIsoDateInTimeZone(new Date(), timeZone);
   const weekStart = intake?.week_start ?? getUpcomingWeekWindow(timeZone).weekStart;
@@ -611,6 +667,14 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
   }));
   const checkedInTodayCount = membershipsWithPresence.filter((membership) => membership.hasPostedToday).length;
   const hasPostedToday = postedTodayMembershipIds.has(userMembership.id);
+  const supportReactionsByMessageId = new Map<string, SupportReactionRow[]>();
+
+  for (const reaction of (supportReactions ?? []) as SupportReactionRow[]) {
+    const existing = supportReactionsByMessageId.get(reaction.message_id) ?? [];
+    existing.push(reaction);
+    supportReactionsByMessageId.set(reaction.message_id, existing);
+  }
+
   const mappedMessages = (messages ?? []).map((message, index) => {
     const author = membershipById.get(message.membership_id);
     const tone: "blush" | "porcelain" = index % 2 === 0 ? "blush" : "porcelain";
@@ -618,6 +682,27 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
     const groupedWithPrevious =
       previous != null &&
       new Date(message.created_at).getTime() - new Date(previous.created_at).getTime() < 45 * 60 * 1000;
+    const reactionsForMessage = supportReactionsByMessageId.get(message.id) ?? [];
+    const supports = {
+      heart: {
+        count: reactionsForMessage.filter((reaction) => reaction.kind === "heart").length,
+        reacted: reactionsForMessage.some(
+          (reaction) => reaction.kind === "heart" && reaction.membership_id === userMembership.id
+        ),
+      },
+      hug: {
+        count: reactionsForMessage.filter((reaction) => reaction.kind === "hug").length,
+        reacted: reactionsForMessage.some(
+          (reaction) => reaction.kind === "hug" && reaction.membership_id === userMembership.id
+        ),
+      },
+      support: {
+        count: reactionsForMessage.filter((reaction) => reaction.kind === "support").length,
+        reacted: reactionsForMessage.some(
+          (reaction) => reaction.kind === "support" && reaction.membership_id === userMembership.id
+        ),
+      },
+    } satisfies Record<SupportReactionKind, { count: number; reacted: boolean }>;
     return {
       ...(message as MessageRow),
       authorName: displayNameByMembershipId.get(message.membership_id) ?? author?.pseudonym ?? "Hidden Bunny",
@@ -625,6 +710,7 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
       groupedWithPrevious,
       isOwn: message.membership_id === userMembership.id,
       relativeTime: formatMessageTime(message.created_at, timeZone),
+      supports,
       tone,
     };
   });
@@ -639,6 +725,7 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
     memberCount: membershipRows.length,
     memberships: membershipsWithPresence.map((membership) => ({
       ...membership,
+      mentionAlias: mentionAliasByMembershipId.get(membership.id) ?? buildMentionAlias(membership.pseudonym),
       pseudonym: displayNameByMembershipId.get(membership.id) ?? membership.pseudonym,
     })),
     messages: mappedMessages,
@@ -696,6 +783,94 @@ export async function postMessageToMyCircle(email: string, body: string) {
 
   if (error) {
     return { ok: false, error: "Message could not be sent right now." } as const;
+  }
+
+  revalidatePath("/my-circle");
+
+  return { ok: true } as const;
+}
+
+export async function toggleSupportReactionForMessage(
+  email: string,
+  messageId: string,
+  kind: SupportReactionKind
+) {
+  const user = await ensureAppUser(email);
+  await ensureCircleForUser(user);
+  const supabase = await getCircleReadClient(email);
+
+  const { data: appUser, error: appUserError } = await supabase
+    .from("app_users")
+    .select("*")
+    .eq("auth_credential", normalizeEmail(email))
+    .maybeSingle<AppUserRow>();
+
+  if (appUserError || !appUser) {
+    return { ok: false, error: "Could not verify the signed-in member." } as const;
+  }
+
+  const { data: userMembership, error: membershipError } = await supabase
+    .from("memberships")
+    .select("*")
+    .eq("user_id", appUser.id)
+    .eq("status", "active")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<MembershipRow>();
+
+  if (membershipError || !userMembership) {
+    return { ok: false, error: "Could not find an active circle membership." } as const;
+  }
+
+  const { data: existing, error: existingError } = await supabase
+    .from("message_support_reactions")
+    .select("*")
+    .eq("message_id", messageId)
+    .eq("membership_id", userMembership.id)
+    .eq("kind", kind)
+    .maybeSingle<SupportReactionRow>();
+
+  if (existingError) {
+    if (isMissingRelationError(existingError)) {
+      return {
+        ok: false,
+        error: "Support reactions need one small database update before they can be used.",
+      } as const;
+    }
+
+    return { ok: false, error: "Support could not be updated right now." } as const;
+  }
+
+  if (existing) {
+    const { error } = await supabase.from("message_support_reactions").delete().eq("id", existing.id);
+
+    if (error) {
+      if (isMissingRelationError(error)) {
+        return {
+          ok: false,
+          error: "Support reactions need one small database update before they can be used.",
+        } as const;
+      }
+
+      return { ok: false, error: "Support could not be updated right now." } as const;
+    }
+  } else {
+    const { error } = await supabase.from("message_support_reactions").insert({
+      message_id: messageId,
+      membership_id: userMembership.id,
+      kind,
+    });
+
+    if (error) {
+      if (isMissingRelationError(error)) {
+        return {
+          ok: false,
+          error: "Support reactions need one small database update before they can be used.",
+        } as const;
+      }
+
+      return { ok: false, error: "Support could not be updated right now." } as const;
+    }
   }
 
   revalidatePath("/my-circle");

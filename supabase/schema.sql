@@ -92,6 +92,15 @@ create table if not exists message_reports (
   unique (message_id, reporter_membership_id)
 );
 
+create table if not exists message_support_reactions (
+  id uuid primary key default gen_random_uuid(),
+  message_id uuid not null references messages(id) on delete cascade,
+  membership_id uuid not null references memberships(id) on delete cascade,
+  kind text not null check (kind in ('heart', 'hug', 'support')),
+  created_at timestamptz not null default now(),
+  unique (message_id, membership_id, kind)
+);
+
 create table if not exists check_ins (
   id uuid primary key default gen_random_uuid(),
   circle_id uuid not null references circles(id) on delete cascade,
@@ -138,6 +147,7 @@ create table if not exists pilot_intake_requests (
 create index if not exists intents_week_idx on intents (week_id, category, language, timezone_band);
 create index if not exists circles_week_idx on circles (week_id, status);
 create index if not exists messages_circle_idx on messages (circle_id, created_at);
+create index if not exists message_support_reactions_message_idx on message_support_reactions (message_id, created_at);
 create index if not exists check_ins_circle_idx on check_ins (circle_id, day);
 create index if not exists safety_events_status_idx on safety_events (status, created_at);
 

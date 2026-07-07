@@ -1,13 +1,13 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
 import { CircleFooterNav } from "@/components/circle/CircleFooterNav";
 import { isLocalDevAuthEnabled, requireAuthenticatedUserEmail } from "@/lib/auth";
 import { getMyCircleView } from "@/lib/circle";
 import { getMemberEntryState } from "@/lib/intake";
 
-import { sendCircleMessage } from "./actions";
+import { sendCircleMessage, toggleSupportReaction } from "./actions";
+import { CircleAutoRefresh } from "./CircleAutoRefresh";
+import { MentionComposer } from "./MentionComposer";
 
 type MyCirclePageProps = {
   searchParams: Promise<{
@@ -17,9 +17,13 @@ type MyCirclePageProps = {
 
 function hexToRgb(hex: string) {
   const normalized = hex.replace("#", "");
-  const full = normalized.length === 3
-    ? normalized.split("").map((value) => `${value}${value}`).join("")
-    : normalized;
+  const full =
+    normalized.length === 3
+      ? normalized
+          .split("")
+          .map((value) => `${value}${value}`)
+          .join("")
+      : normalized;
   const value = Number.parseInt(full, 16);
 
   return {
@@ -48,6 +52,29 @@ function avatarStyle(accentColor: string) {
   };
 }
 
+function renderMessageWithMentions(body: string, aliases: Map<string, string>) {
+  const parts = body.split(/(@[A-Za-z][A-Za-z0-9_-]*)/g);
+
+  return parts.map((part, index) => {
+    if (!part.startsWith("@")) {
+      return <span key={`${part}-${index}`}>{part}</span>;
+    }
+
+    const normalized = part.slice(1).toLowerCase();
+    const label = aliases.get(normalized);
+
+    if (!label) {
+      return <span key={`${part}-${index}`}>{part}</span>;
+    }
+
+    return (
+      <span className="circle-note-mention" key={`${part}-${index}`}>
+        @{label}
+      </span>
+    );
+  });
+}
+
 export default async function MyCirclePage({ searchParams }: MyCirclePageProps) {
   const email = await requireAuthenticatedUserEmail();
   const entryState = await getMemberEntryState(email);
@@ -70,11 +97,21 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
   const statusText = circle.hasPostedToday
     ? "Everyone's taking this week one small step at a time."
     : `${circle.checkedInTodayCount} of 6 checked in`;
+  const mentionAliases = new Map(
+    circle.memberships
+      .filter((member) => !member.isYou)
+      .flatMap((member) => [
+        [member.mentionAlias.toLowerCase(), member.mentionAlias],
+        [member.pseudonym.replace(/\s+/g, "").toLowerCase(), member.mentionAlias],
+      ])
+  );
 
   return (
     <main className="cb-entry-page">
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
+          <CircleAutoRefresh />
+
           <div className="circle-topbar circle-topbar-simple">
             <p className="circle-topbar-brand">Cardio Bunny</p>
           </div>
@@ -106,42 +143,53 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                       {message.authorName.slice(0, 1)}
                     </span>
                   ) : null}
+
                   <div
                     className={`circle-note ${message.isOwn ? "circle-note-own" : "circle-note-peer"}`}
                     style={bubbleStyle(message.accentColor)}
                   >
                     <p className="circle-note-author">{message.authorName}</p>
-                    <p className="circle-note-body">{message.body}</p>
+                    <p className="circle-note-body">
+                      {renderMessageWithMentions(message.body, mentionAliases)}
+                    </p>
                     <p className="circle-note-time">{message.relativeTime}</p>
+
+                    <div className="circle-support-row">
+                      {(["heart", "hug", "support"] as const).map((kind) => (
+                        <form action={toggleSupportReaction} key={`${message.id}-${kind}`}>
+                          <input name="messageId" type="hidden" value={message.id} />
+                          <input name="kind" type="hidden" value={kind} />
+                          <button
+                            className={`circle-support-pill button-reset ${
+                              message.supports[kind].reacted ? "circle-support-pill-active" : ""
+                            }`}
+                            type="submit"
+                          >
+                            <span className="circle-support-pill-label">
+                              {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
+                            </span>
+                            <span className="circle-support-pill-count">{message.supports[kind].count}</span>
+                          </button>
+                        </form>
+                      ))}
+                    </div>
                   </div>
                 </article>
               ))}
             </div>
 
-            <section className="circle-composer-card circle-composer-sticky">
-              {error ? <p className="error-banner">{error}</p> : null}
-
-              <div className="circle-composer-head">
-                <h2>{circle.prompt}</h2>
-              </div>
-
-              <form action={sendCircleMessage} className="composer-form circle-composer-form circle-composer-form-inline">
-                <textarea
-                  className="composer-textarea circle-journal-textarea"
-                  name="body"
-                  placeholder="Share something small..."
-                  rows={1}
-                  required
-                />
-                <button
-                  aria-label="Send"
-                  className="cb-submit button-reset circle-share-button circle-share-button-inline"
-                  type="submit"
-                >
-                  <span>➜</span>
-                </button>
-              </form>
-            </section>
+            <MentionComposer
+              action={sendCircleMessage}
+              error={error}
+              members={circle.memberships
+                .filter((member) => !member.isYou)
+                .map((member) => ({
+                  id: member.id,
+                  mentionAlias: member.mentionAlias,
+                  name: member.pseudonym,
+                }))}
+              prompt={circle.prompt}
+            />
           </section>
 
           <CircleFooterNav active="circle" showDevSignOut={showDevSignOut} />
