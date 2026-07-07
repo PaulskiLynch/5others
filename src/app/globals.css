@@ -1408,10 +1408,7 @@ h3 {
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  color: rgba(47, 30, 24, 0.88);
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
+  border: 1px solid rgba(61, 44, 33, 0.12);
   opacity: 0.72;
 }
 
@@ -1461,14 +1458,58 @@ h3 {
 }
 
 .circle-demo-avatar {
+  position: relative;
   display: grid;
   place-items: center;
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
+  border: 1px solid rgba(61, 44, 33, 0.14);
+}
+
+.circle-demo-bunny-ears::before,
+.circle-demo-bunny-ears::after,
+.circle-demo-bunny-face::before,
+.circle-demo-bunny-face::after {
+  content: "";
+  position: absolute;
+}
+
+.circle-demo-bunny-ears::before,
+.circle-demo-bunny-ears::after {
+  top: -8px;
+  width: 8px;
+  height: 13px;
+  border-radius: 999px 999px 5px 5px;
+  background: inherit;
+  border: 1px solid rgba(61, 44, 33, 0.14);
+}
+
+.circle-demo-bunny-ears::before {
+  left: 4px;
+  transform: rotate(-12deg);
+}
+
+.circle-demo-bunny-ears::after {
+  right: 4px;
+  transform: rotate(12deg);
+}
+
+.circle-demo-bunny-face::before,
+.circle-demo-bunny-face::after {
+  top: 11px;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(66, 47, 42, 0.74);
+}
+
+.circle-demo-bunny-face::before {
+  left: 8px;
+}
+
+.circle-demo-bunny-face::after {
+  right: 8px;
 }
 
 .circle-demo-message-stack {

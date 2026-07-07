@@ -6,7 +6,6 @@ import { useState } from "react";
 type DemoMessage = {
   accentColor: string;
   author: string;
-  avatarLabel: string;
   body: string;
   own: boolean;
   time: string;
@@ -15,7 +14,6 @@ type DemoMessage = {
 const initialMessages: DemoMessage[] = [
   {
     author: "Silver Cottontail",
-    avatarLabel: "S",
     accentColor: "#e7d6b5",
     time: "9:15 AM",
     body: "I restarted my morning walk today. Only twelve minutes, but it counted.",
@@ -23,7 +21,6 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Gentle Cottontail",
-    avatarLabel: "G",
     accentColor: "#f1d9d8",
     time: "9:17 AM",
     body: "That absolutely counts. I am beginning again too.",
@@ -31,7 +28,6 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Brave Cottontail",
-    avatarLabel: "B",
     accentColor: "#f2e3c9",
     time: "9:19 AM",
     body: "Water first, shoes on second. What is the smallest version of the walk you can do today?",
@@ -39,7 +35,6 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Open Cottontail",
-    avatarLabel: "O",
     accentColor: "#d4e3d5",
     time: "9:22 AM",
     body: "Mine is just to get outside before lunch. I keep overthinking it when I stay indoors.",
@@ -47,7 +42,6 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "You",
-    avatarLabel: "Y",
     accentColor: "#e0c070",
     time: "9:24 AM",
     body: "Mine is simply shoes on. No promises beyond that.",
@@ -55,7 +49,6 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Calm Cottontail",
-    avatarLabel: "C",
     accentColor: "#efe0d0",
     time: "9:26 AM",
     body: "Same. If I make it tiny enough, I usually do it. Five minutes still changes the day.",
@@ -64,12 +57,12 @@ const initialMessages: DemoMessage[] = [
 ];
 
 const memberStatuses = [
-  { label: "S", active: true, tone: "#e7d6b5" },
-  { label: "G", active: true, tone: "#f1d9d8" },
-  { label: "B", active: true, tone: "#f2e3c9" },
-  { label: "O", active: true, tone: "#d4e3d5" },
-  { label: "C", active: false, tone: "#d9d1ca" },
-  { label: "Y", active: true, tone: "#e0c070" },
+  { active: true, tone: "#e7d6b5" },
+  { active: true, tone: "#f1d9d8" },
+  { active: true, tone: "#f2e3c9" },
+  { active: true, tone: "#d4e3d5" },
+  { active: false, tone: "#d9d1ca" },
+  { active: true, tone: "#e0c070" },
 ] as const;
 
 function hexToRgb(hex: string) {
@@ -129,7 +122,6 @@ export function CircleDemoClient() {
       ...current,
       {
         author: "You",
-        avatarLabel: "Y",
         accentColor: "#e0c070",
         body: trimmed,
         own: true,
@@ -159,17 +151,18 @@ export function CircleDemoClient() {
             </Link>
           </header>
 
-          <div className="circle-demo-members" aria-label="Circle members">
-            {memberStatuses.map((member) => (
-              <span
-                className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
-                key={member.label}
-                style={{ backgroundColor: member.tone }}
-              >
-                {member.label}
-              </span>
-            ))}
-          </div>
+            <div className="circle-demo-members" aria-label="Circle members">
+              {memberStatuses.map((member) => (
+                <span
+                  className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
+                  key={`${member.tone}-${member.active ? "on" : "off"}`}
+                  style={{ backgroundColor: member.tone }}
+                >
+                  <span className="circle-demo-bunny-ears" />
+                  <span className="circle-demo-bunny-face" />
+                </span>
+              ))}
+            </div>
 
           <section className="circle-demo-pinned">
             <p className="circle-demo-pinned-label">This week</p>
@@ -188,7 +181,8 @@ export function CircleDemoClient() {
                     className="circle-demo-avatar"
                     style={avatarStyle(message.accentColor)}
                   >
-                    {message.avatarLabel}
+                    <span className="circle-demo-bunny-ears" />
+                    <span className="circle-demo-bunny-face" />
                   </span>
                 ) : null}
 
