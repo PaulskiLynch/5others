@@ -2,7 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type SupportCounts = {
+  heart: number;
+  hug: number;
+  support: number;
+};
+
+type SupportState = {
+  heart: boolean;
+  hug: boolean;
+  support: boolean;
+};
 
 type DemoMessage = {
   accentColor: string;
@@ -10,6 +22,7 @@ type DemoMessage = {
   avatarSrc: string;
   body: string;
   own: boolean;
+  supports: SupportCounts;
   time: string;
 };
 
@@ -21,6 +34,7 @@ const initialMessages: DemoMessage[] = [
     time: "9:15 AM",
     body: "I restarted my morning walk today. Only twelve minutes, but it counted.",
     own: false,
+    supports: { heart: 1, hug: 0, support: 0 },
   },
   {
     author: "Gentle Cottontail",
@@ -29,6 +43,7 @@ const initialMessages: DemoMessage[] = [
     time: "9:17 AM",
     body: "That absolutely counts. I am beginning again too.",
     own: false,
+    supports: { heart: 1, hug: 1, support: 0 },
   },
   {
     author: "Brave Cottontail",
@@ -37,6 +52,7 @@ const initialMessages: DemoMessage[] = [
     time: "9:19 AM",
     body: "Water first, shoes on second. What is the smallest version of the walk you can do today?",
     own: false,
+    supports: { heart: 0, hug: 0, support: 1 },
   },
   {
     author: "Open Cottontail",
@@ -45,6 +61,7 @@ const initialMessages: DemoMessage[] = [
     time: "9:22 AM",
     body: "Mine is just to get outside before lunch. I keep overthinking it when I stay indoors.",
     own: false,
+    supports: { heart: 0, hug: 0, support: 0 },
   },
   {
     author: "You",
@@ -53,6 +70,7 @@ const initialMessages: DemoMessage[] = [
     time: "9:24 AM",
     body: "Mine is simply shoes on. No promises beyond that.",
     own: true,
+    supports: { heart: 0, hug: 0, support: 0 },
   },
   {
     author: "Calm Cottontail",
@@ -61,17 +79,63 @@ const initialMessages: DemoMessage[] = [
     time: "9:26 AM",
     body: "Same. If I make it tiny enough, I usually do it. Five minutes still changes the day.",
     own: false,
+    supports: { heart: 1, hug: 0, support: 1 },
   },
 ];
 
 const memberStatuses = [
-  { active: true, src: "/demo-bunnies/bunny-1.png" },
-  { active: true, src: "/demo-bunnies/bunny-3.png" },
-  { active: true, src: "/demo-bunnies/bunny-6.png" },
-  { active: true, src: "/demo-bunnies/bunny-5.png" },
-  { active: false, src: "/demo-bunnies/bunny-4.png" },
-  { active: true, src: "/demo-bunnies/bunny-2.png" },
+  { active: true, mentionAlias: "SilverBunny", src: "/demo-bunnies/bunny-1.png" },
+  { active: true, mentionAlias: "GentleBunny", src: "/demo-bunnies/bunny-3.png" },
+  { active: true, mentionAlias: "BraveBunny", src: "/demo-bunnies/bunny-6.png" },
+  { active: true, mentionAlias: "OpenBunny", src: "/demo-bunnies/bunny-5.png" },
+  { active: false, mentionAlias: "CalmBunny", src: "/demo-bunnies/bunny-4.png" },
+  { active: true, mentionAlias: "You", src: "/demo-bunnies/bunny-2.png" },
 ] as const;
+
+const mentionDirectory = new Map([
+  ["silverbunny", "SilverBunny"],
+  ["gentlebunny", "GentleBunny"],
+  ["bravebunny", "BraveBunny"],
+  ["openbunny", "OpenBunny"],
+  ["calmbunny", "CalmBunny"],
+]);
+
+const DEMO_STORAGE_KEY = "cardiobunny-demo-circle-v2";
+
+function getInitialDemoState() {
+  if (typeof window === "undefined") {
+    return {
+      messages: initialMessages,
+      reacted: {} as Record<string, SupportState>,
+    };
+  }
+
+  try {
+    const raw = window.localStorage.getItem(DEMO_STORAGE_KEY);
+
+    if (!raw) {
+      return {
+        messages: initialMessages,
+        reacted: {} as Record<string, SupportState>,
+      };
+    }
+
+    const parsed = JSON.parse(raw) as {
+      messages?: DemoMessage[];
+      reacted?: Record<string, SupportState>;
+    };
+
+    return {
+      messages: parsed.messages?.length ? parsed.messages : initialMessages,
+      reacted: parsed.reacted ?? {},
+    };
+  } catch {
+    return {
+      messages: initialMessages,
+      reacted: {} as Record<string, SupportState>,
+    };
+  }
+}
 
 function hexToRgb(hex: string) {
   const normalized = hex.replace("#", "");
@@ -105,9 +169,62 @@ function getTimeLabel() {
   }).format(new Date());
 }
 
+function renderMessageWithMentions(body: string) {
+  const parts = body.split(/(@[A-Za-z][A-Za-z0-9_-]*)/g);
+
+  return parts.map((part, index) => {
+    if (!part.startsWith("@")) {
+      return <span key={`${part}-${index}`}>{part}</span>;
+    }
+
+    const normalized = part.slice(1).toLowerCase();
+    const label = mentionDirectory.get(normalized);
+
+    if (!label) {
+      return <span key={`${part}-${index}`}>{part}</span>;
+    }
+
+    return (
+      <span className="circle-note-mention" key={`${part}-${index}`}>
+        @{label}
+      </span>
+    );
+  });
+}
+
 export function CircleDemoClient() {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState(() => getInitialDemoState().messages);
   const [draft, setDraft] = useState("");
+  const [reacted, setReacted] = useState<Record<string, SupportState>>(
+    () => getInitialDemoState().reacted
+  );
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      DEMO_STORAGE_KEY,
+      JSON.stringify({
+        messages,
+        reacted,
+      })
+    );
+  }, [messages, reacted]);
+
+  function handleMentionClick(mentionAlias: string) {
+    const field = textareaRef.current;
+
+    if (!field) {
+      return;
+    }
+
+    const trimmed = field.value.replace(/\s+$/, "");
+    const nextValue = trimmed ? `${trimmed} @${mentionAlias} ` : `@${mentionAlias} `;
+    field.value = nextValue;
+    setDraft(nextValue);
+    field.focus();
+    const end = nextValue.length;
+    field.setSelectionRange(end, end);
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -125,10 +242,40 @@ export function CircleDemoClient() {
         accentColor: "#e0c070",
         body: trimmed,
         own: true,
+        supports: { heart: 0, hug: 0, support: 0 },
         time: getTimeLabel(),
       },
     ]);
     setDraft("");
+  }
+
+  function handleSupport(messageIndex: number, kind: keyof SupportCounts) {
+    const messageKey = `${messageIndex}`;
+    const hasReacted = reacted[messageKey]?.[kind] ?? false;
+
+    setMessages((current) =>
+      current.map((message, index) =>
+        index === messageIndex
+          ? {
+              ...message,
+              supports: {
+                ...message.supports,
+                [kind]: Math.max(0, message.supports[kind] + (hasReacted ? -1 : 1)),
+              },
+            }
+          : message
+      )
+    );
+
+    setReacted((current) => ({
+      ...current,
+      [messageKey]: {
+        heart: current[messageKey]?.heart ?? false,
+        hug: current[messageKey]?.hug ?? false,
+        support: current[messageKey]?.support ?? false,
+        [kind]: !hasReacted,
+      },
+    }));
   }
 
   return (
@@ -137,7 +284,7 @@ export function CircleDemoClient() {
         <div className="circle-demo-phone">
           <header className="circle-demo-topbar">
             <Link aria-label="Back" className="circle-demo-iconbutton" href="/">
-              <span aria-hidden="true">‹</span>
+              <span aria-hidden="true">Back</span>
             </Link>
 
             <div className="circle-demo-heading">
@@ -147,20 +294,20 @@ export function CircleDemoClient() {
             </div>
 
             <Link aria-label="Settings" className="circle-demo-iconbutton" href="/settings">
-              <span aria-hidden="true">⋯</span>
+              <span aria-hidden="true">Menu</span>
             </Link>
           </header>
 
-            <div className="circle-demo-members" aria-label="Circle members">
-              {memberStatuses.map((member) => (
-                <span
-                  className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
-                  key={`${member.src}-${member.active ? "on" : "off"}`}
-                >
-                  <Image alt="" className="circle-demo-member-image" height={28} src={member.src} width={28} />
-                </span>
-              ))}
-            </div>
+          <div className="circle-demo-members" aria-label="Circle members">
+            {memberStatuses.map((member) => (
+              <span
+                className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
+                key={`${member.src}-${member.active ? "on" : "off"}`}
+              >
+                <Image alt="" className="circle-demo-member-image" height={28} src={member.src} width={28} />
+              </span>
+            ))}
+          </div>
 
           <section className="circle-demo-pinned">
             <p className="circle-demo-pinned-label">This week</p>
@@ -174,10 +321,7 @@ export function CircleDemoClient() {
                 key={`${message.author}-${message.time}-${index}`}
               >
                 {!message.own ? (
-                  <span
-                    aria-hidden="true"
-                    className="circle-demo-avatar"
-                  >
+                  <span aria-hidden="true" className="circle-demo-avatar">
                     <Image alt="" className="circle-demo-avatar-image" height={28} src={message.avatarSrc} width={28} />
                   </span>
                 ) : null}
@@ -189,10 +333,28 @@ export function CircleDemoClient() {
                     className={`circle-demo-bubble ${message.own ? "circle-demo-bubble-own" : ""}`}
                     style={bubbleStyle(message.accentColor, message.own)}
                   >
-                    <p className="circle-demo-bubble-copy">{message.body}</p>
+                    <p className="circle-demo-bubble-copy">{renderMessageWithMentions(message.body)}</p>
                   </div>
 
                   <p className="circle-demo-time">{message.time}</p>
+
+                  <div className="circle-support-row">
+                    {(["heart", "hug", "support"] as const).map((kind) => (
+                      <button
+                        className={`circle-support-pill button-reset ${
+                          reacted[`${index}`]?.[kind] ? "circle-support-pill-active" : ""
+                        }`}
+                        key={`${index}-${kind}`}
+                        onClick={() => handleSupport(index, kind)}
+                        type="button"
+                      >
+                        <span className="circle-support-pill-label">
+                          {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
+                        </span>
+                        <span className="circle-support-pill-count">{message.supports[kind]}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}
@@ -201,16 +363,32 @@ export function CircleDemoClient() {
           <section className="circle-demo-composer">
             <p className="circle-demo-prompt">What&apos;s the smallest promise you can honestly keep today?</p>
 
+            <div className="circle-mention-strip" aria-label="Mention a circle member">
+              {memberStatuses
+                .filter((member) => member.mentionAlias !== "You")
+                .map((member) => (
+                  <button
+                    className="circle-mention-chip button-reset"
+                    key={member.mentionAlias}
+                    onClick={() => handleMentionClick(member.mentionAlias)}
+                    type="button"
+                  >
+                    @{member.mentionAlias}
+                  </button>
+                ))}
+            </div>
+
             <form className="circle-demo-composer-row" onSubmit={handleSubmit}>
               <textarea
                 className="circle-demo-input"
                 onChange={(event) => setDraft(event.target.value)}
                 placeholder="Share something small..."
+                ref={textareaRef}
                 rows={1}
                 value={draft}
               />
               <button aria-label="Send" className="circle-demo-send" type="submit">
-                <span aria-hidden="true">➜</span>
+                <span aria-hidden="true">Send</span>
               </button>
             </form>
           </section>
