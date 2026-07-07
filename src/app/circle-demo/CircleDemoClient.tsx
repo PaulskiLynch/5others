@@ -217,6 +217,8 @@ export function CircleDemoClient() {
     () => getInitialDemoState().reacted
   );
   const [replyToIndex, setReplyToIndex] = useState<number | null>(null);
+  const [mentionQuery, setMentionQuery] = useState("");
+  const [showMentionMenu, setShowMentionMenu] = useState(false);
   const feedEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -287,6 +289,8 @@ export function CircleDemoClient() {
     persistDemoState(nextMessages, reacted);
     setDraft("");
     setReplyToIndex(null);
+    setMentionQuery("");
+    setShowMentionMenu(false);
   }
 
   function handleSupport(messageIndex: number, kind: keyof SupportCounts) {
@@ -330,12 +334,76 @@ export function CircleDemoClient() {
     setReacted({});
     setDraft("");
     setReplyToIndex(null);
+    setMentionQuery("");
+    setShowMentionMenu(false);
     persistDemoState(initialMessages, {});
     window.localStorage.removeItem(DEMO_STORAGE_KEY);
   }
 
+  function updateMentionState(value: string, caretPosition?: number | null) {
+    const safeCaret = caretPosition ?? value.length;
+    const beforeCaret = value.slice(0, safeCaret);
+    const mentionMatch = beforeCaret.match(/(^|\s)@([A-Za-z0-9_-]*)$/);
+
+    if (!mentionMatch) {
+      setMentionQuery("");
+      setShowMentionMenu(false);
+      return;
+    }
+
+    setMentionQuery(mentionMatch[2] ?? "");
+    setShowMentionMenu(true);
+  }
+
+  function insertMention(mentionAlias: string) {
+    const field = textareaRef.current;
+
+    if (!field) {
+      return;
+    }
+
+    const start = field.selectionStart ?? field.value.length;
+    const end = field.selectionEnd ?? field.value.length;
+    const before = field.value.slice(0, start).replace(/(^|\s)@([A-Za-z0-9_-]*)$/, "$1");
+    const after = field.value.slice(end);
+    const nextValue = `${before}@${mentionAlias} ${after}`;
+
+    setDraft(nextValue);
+    setMentionQuery("");
+    setShowMentionMenu(false);
+
+    window.requestAnimationFrame(() => {
+      field.focus();
+      const nextCaret = before.length + mentionAlias.length + 2;
+      field.setSelectionRange(nextCaret, nextCaret);
+    });
+  }
+
+  function handleDraftChange(value: string, caretPosition?: number | null) {
+    setDraft(value);
+    updateMentionState(value, caretPosition);
+  }
+
+  function handleComposerKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (draft.trim()) {
+        event.currentTarget.form?.requestSubmit();
+      }
+      return;
+    }
+
+    if (event.key === "Escape") {
+      setShowMentionMenu(false);
+      setMentionQuery("");
+    }
+  }
+
   const seenTodayAuthors = new Set(messages.map((message) => message.author));
   const replyTarget = replyToIndex !== null ? messages[replyToIndex] : null;
+  const mentionSuggestions = Array.from(mentionDirectory.values()).filter((alias) =>
+    alias.toLowerCase().includes(mentionQuery.toLowerCase())
+  );
 
   return (
     <main className="cb-entry-page">
@@ -459,14 +527,36 @@ export function CircleDemoClient() {
             ) : null}
 
             <form className="circle-demo-composer-row" onSubmit={handleSubmit}>
-              <textarea
-                className="circle-demo-input"
-                onChange={(event) => setDraft(event.target.value)}
-                placeholder="Share something small. What can you honestly do today?"
-                ref={textareaRef}
-                rows={1}
-                value={draft}
-              />
+              <div className="circle-demo-composer-inputwrap">
+                <textarea
+                  className="circle-demo-input"
+                  onChange={(event) =>
+                    handleDraftChange(event.target.value, event.currentTarget.selectionStart)
+                  }
+                  onClick={(event) =>
+                    updateMentionState(event.currentTarget.value, event.currentTarget.selectionStart)
+                  }
+                  onKeyDown={handleComposerKeyDown}
+                  placeholder="Share something small. What can you honestly do today?"
+                  ref={textareaRef}
+                  rows={1}
+                  value={draft}
+                />
+                {showMentionMenu && mentionSuggestions.length ? (
+                  <div className="circle-demo-mentions-menu">
+                    {mentionSuggestions.map((alias) => (
+                      <button
+                        className="circle-demo-mentions-item button-reset"
+                        key={alias}
+                        onClick={() => insertMention(alias)}
+                        type="button"
+                      >
+                        @{alias}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
               <button aria-label="Send" className="circle-demo-send" type="submit">
                 <span aria-hidden="true">Send</span>
               </button>
