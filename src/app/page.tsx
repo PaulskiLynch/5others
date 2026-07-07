@@ -29,8 +29,8 @@ export default async function Home() {
       <CardioBunnySignInScreen
         next={withNext("/continue", "/my-circle")}
         path="/"
-        routing="hash"
-        signUpUrl="#sign-up"
+        routing="path"
+        signUpUrl={withNext("/sign-up", "/my-circle")}
         withSignUp
       />
     );
