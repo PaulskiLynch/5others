@@ -97,7 +97,6 @@ export default function CircleDemoPage() {
                   className="composer-textarea circle-journal-textarea"
                   placeholder="Share something small..."
                   rows={1}
-                  readOnly
                 />
                 <button
                   aria-label="Send"

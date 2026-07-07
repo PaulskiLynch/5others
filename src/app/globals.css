@@ -1046,13 +1046,13 @@ h3 {
 .circle-room-panel {
   padding: 14px 18px 0;
   border-radius: 28px;
-  border: 1px solid rgba(255, 246, 236, 0.07);
+  border: 1px solid rgba(255, 246, 236, 0.08);
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 42%),
-    linear-gradient(180deg, #151114 0%, #130f12 100%);
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 44%),
+    linear-gradient(180deg, #211920 0%, #1a1519 100%);
   color: #fff7f2;
   box-shadow:
-    0 28px 70px rgba(0, 0, 0, 0.24),
+    0 28px 70px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
@@ -1490,10 +1490,10 @@ h3 {
 .cb-entry-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(232, 177, 62, 0.12), transparent 24%),
-    radial-gradient(circle at 90% 8%, rgba(255, 227, 160, 0.09), transparent 18%),
-    radial-gradient(circle at bottom center, rgba(108, 79, 24, 0.18), transparent 30%),
-    linear-gradient(180deg, #0a0a0d 0%, #141216 48%, #111013 100%);
+    radial-gradient(circle at top left, rgba(232, 177, 62, 0.14), transparent 26%),
+    radial-gradient(circle at 90% 8%, rgba(255, 227, 160, 0.11), transparent 20%),
+    radial-gradient(circle at bottom center, rgba(126, 92, 32, 0.22), transparent 34%),
+    linear-gradient(180deg, #151014 0%, #1b151a 48%, #161116 100%);
   color: #f7f1ea;
 }
 
