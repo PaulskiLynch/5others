@@ -82,11 +82,8 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                 <Link className="circle-menu-link" href="/my-circle">
                   Your Circle
                 </Link>
-                <Link className="circle-menu-link" href="/week-close">
-                  Previous Circles
-                </Link>
-                <Link className="circle-menu-link" href="/week-close">
-                  Archive
+                <Link className="circle-menu-link" href="/settings#members">
+                  Circle Members
                 </Link>
                 <Link className="circle-menu-link" href="/settings">
                   Settings

@@ -76,8 +76,7 @@ export default function CircleDemoPage() {
               <summary className="circle-topbar-button">☰</summary>
               <div className="circle-menu-panel">
                 <span className="circle-menu-link">Your Circle</span>
-                <span className="circle-menu-link">Previous Circles</span>
-                <span className="circle-menu-link">Archive</span>
+                <span className="circle-menu-link">Circle Members</span>
                 <span className="circle-menu-link">Settings</span>
                 <span className="circle-menu-link">Help</span>
                 <span className="circle-menu-link">Log out</span>

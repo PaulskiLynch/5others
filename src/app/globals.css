@@ -1468,6 +1468,11 @@ h3 {
   padding-top: 14px;
 }
 
+.settings-row-stack {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
 .settings-row + .settings-row {
   margin-top: 14px;
   padding-top: 14px;
@@ -1485,6 +1490,110 @@ h3 {
   margin-top: 6px;
   color: rgba(255, 245, 235, 0.62);
   line-height: 1.55;
+}
+
+.settings-toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.settings-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 245, 235, 0.8);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.settings-chip-active {
+  border-color: rgba(228, 178, 70, 0.34);
+  color: #f6d27b;
+  background: rgba(228, 178, 70, 0.1);
+}
+
+.settings-member-list {
+  display: grid;
+  gap: 14px;
+}
+
+.settings-member-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.settings-member-badge {
+  color: rgba(255, 245, 235, 0.6);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.82rem;
+}
+
+.settings-link-danger {
+  border-color: rgba(215, 112, 102, 0.24);
+  color: #ffc5bc;
+  background: rgba(215, 112, 102, 0.08);
+}
+
+[data-theme="light"] .cb-entry-page {
+  background:
+    radial-gradient(circle at top left, rgba(232, 177, 62, 0.12), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(255, 227, 160, 0.1), transparent 22%),
+    radial-gradient(circle at bottom center, rgba(208, 181, 136, 0.24), transparent 36%),
+    linear-gradient(180deg, #f2e8dd 0%, #eadfd6 48%, #e8ddd3 100%);
+  color: #2b231f;
+}
+
+[data-theme="light"] .circle-topbar-brand,
+[data-theme="light"] .circle-room-title,
+[data-theme="light"] .circle-room-intent-copy,
+[data-theme="light"] .circle-composer-head h2,
+[data-theme="light"] .settings-title,
+[data-theme="light"] .settings-row strong {
+  color: #2b231f;
+}
+
+[data-theme="light"] .circle-topbar-button,
+[data-theme="light"] .circle-menu-panel,
+[data-theme="light"] .circle-room-panel,
+[data-theme="light"] .circle-composer-card,
+[data-theme="light"] .settings-card,
+[data-theme="light"] .phone-shell {
+  background-color: rgba(255, 252, 247, 0.88);
+  color: #2b231f;
+}
+
+[data-theme="light"] .circle-room-panel {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.85), transparent 44%),
+    linear-gradient(180deg, #fff8f3 0%, #f7efe6 100%);
+}
+
+[data-theme="light"] .circle-menu-link,
+[data-theme="light"] .circle-room-day,
+[data-theme="light"] .circle-room-status,
+[data-theme="light"] .circle-room-intent-label,
+[data-theme="light"] .settings-copy,
+[data-theme="light"] .settings-row span,
+[data-theme="light"] .settings-member-badge {
+  color: rgba(43, 35, 31, 0.66);
+}
+
+[data-theme="light"] .circle-journal-textarea,
+[data-theme="light"] .settings-chip,
+[data-theme="light"] .settings-link {
+  background: rgba(43, 35, 31, 0.04);
+  color: #2b231f;
+}
+
+[data-theme="light"] .circle-note-author,
+[data-theme="light"] .circle-note-time {
+  color: rgba(43, 35, 31, 0.62);
 }
 
 .cb-entry-page {
