@@ -1,33 +1,41 @@
 import Link from "next/link";
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
 import { isLocalDevAuthEnabled } from "@/lib/auth";
 
 import { CardioBunnyEntryShell } from "./CardioBunnyEntryShell";
 
-type CardioBunnySignInScreenProps = {
+type CardioBunnySignUpScreenProps = {
   next: string;
-  signUpUrl: string;
+  signInUrl: string;
 };
 
-export function CardioBunnySignInScreen({ next, signUpUrl }: CardioBunnySignInScreenProps) {
+export function CardioBunnySignUpScreen({
+  next,
+  signInUrl,
+}: CardioBunnySignUpScreenProps) {
   const showDevAccess = isLocalDevAuthEnabled();
 
   return (
     <CardioBunnyEntryShell
-      cardSubtitle="Sign in first, then we&apos;ll ask a few quiet matching questions."
-      cardTitle="Enter this week&apos;s circle"
+      cardSubtitle="Create your private access first, then we&apos;ll ask a few quiet matching questions."
+      cardTitle="Start this week&apos;s circle"
     >
       <div className="clerk-shell clerk-shell-cardiobunny">
-        <SignIn forceRedirectUrl={next} path="/sign-in" routing="path" signUpUrl={signUpUrl} />
+        <SignUp
+          forceRedirectUrl={next}
+          path="/sign-up"
+          routing="path"
+          signInUrl={signInUrl}
+        />
       </div>
 
       {showDevAccess ? (
         <div className="cb-dev-panel">
           <p className="cb-dev-label">Local development shortcut</p>
           <p className="cb-dev-copy">
-            Magic links are still the real path, but local development can use a temporary
-            session to avoid email throttling.
+            Clerk is the real member path, but local development can still use a temporary
+            session shortcut when we need to test quickly.
           </p>
           <Link className="cb-dev-link" href={`/dev-sign-in?next=${encodeURIComponent(next)}`}>
             Use local dev access
