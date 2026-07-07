@@ -7,11 +7,36 @@ import { CardioBunnyEntryShell } from "./CardioBunnyEntryShell";
 
 type CardioBunnySignInScreenProps = {
   next: string;
+  path?: string;
+  routing?: "hash" | "path";
   signUpUrl: string;
+  withSignUp?: boolean;
 };
 
-export function CardioBunnySignInScreen({ next, signUpUrl }: CardioBunnySignInScreenProps) {
+export function CardioBunnySignInScreen({
+  next,
+  path = "/sign-in",
+  routing = "path",
+  signUpUrl,
+  withSignUp = false,
+}: CardioBunnySignInScreenProps) {
   const showDevAccess = isLocalDevAuthEnabled();
+  const routingProps: Record<string, string | boolean> =
+    routing === "hash"
+      ? ({
+          path,
+          routing: "hash",
+          signUpForceRedirectUrl: next,
+          signUpUrl,
+          withSignUp,
+        } as const)
+      : ({
+          path,
+          routing: "path",
+          signUpForceRedirectUrl: next,
+          signUpUrl,
+          withSignUp,
+        } as const);
 
   return (
     <CardioBunnyEntryShell
@@ -19,7 +44,7 @@ export function CardioBunnySignInScreen({ next, signUpUrl }: CardioBunnySignInSc
       cardTitle="Enter this week&apos;s CardioBunny circles"
     >
       <div className="clerk-shell clerk-shell-cardiobunny">
-        <SignIn forceRedirectUrl={next} path="/sign-in" routing="path" signUpUrl={signUpUrl} />
+        <SignIn forceRedirectUrl={next} {...routingProps} />
       </div>
 
       {showDevAccess ? (
