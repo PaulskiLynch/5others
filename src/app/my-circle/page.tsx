@@ -155,17 +155,29 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                     <p className="circle-note-time">{message.relativeTime}</p>
 
                     <div className="circle-support-row">
+                      <button className="circle-support-pill button-reset" type="button">
+                        <span className="circle-support-pill-label">Reply</span>
+                      </button>
                       {(["heart", "hug", "support"] as const).map((kind) => (
                         <form action={toggleSupportReaction} key={`${message.id}-${kind}`}>
                           <input name="messageId" type="hidden" value={message.id} />
                           <input name="kind" type="hidden" value={kind} />
                           <button
-                            className={`circle-support-pill button-reset ${
+                            className={`circle-support-pill circle-support-pill-icon button-reset ${
+                              kind === "heart"
+                                ? "circle-support-pill-heart"
+                                : kind === "hug"
+                                  ? "circle-support-pill-hug"
+                                  : "circle-support-pill-support"
+                            } ${
                               message.supports[kind].reacted ? "circle-support-pill-active" : ""
                             }`}
                             type="submit"
                           >
-                            <span className="circle-support-pill-label">
+                            <span aria-hidden="true" className="circle-support-pill-iconmark">
+                              {kind === "heart" ? "♥" : kind === "hug" ? "✦" : "☀"}
+                            </span>
+                            <span className="sr-only">
                               {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
                             </span>
                             <span className="circle-support-pill-count">{message.supports[kind].count}</span>
@@ -181,13 +193,6 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
             <MentionComposer
               action={sendCircleMessage}
               error={error}
-              members={circle.memberships
-                .filter((member) => !member.isYou)
-                .map((member) => ({
-                  id: member.id,
-                  mentionAlias: member.mentionAlias,
-                  name: member.pseudonym,
-                }))}
               prompt={circle.prompt}
             />
           </section>

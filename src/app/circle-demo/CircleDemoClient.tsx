@@ -215,22 +215,6 @@ export function CircleDemoClient() {
     );
   }, [messages, reacted]);
 
-  function handleMentionClick(mentionAlias: string) {
-    const field = textareaRef.current;
-
-    if (!field) {
-      return;
-    }
-
-    const trimmed = field.value.replace(/\s+$/, "");
-    const nextValue = trimmed ? `${trimmed} @${mentionAlias} ` : `@${mentionAlias} `;
-    field.value = nextValue;
-    setDraft(nextValue);
-    field.focus();
-    const end = nextValue.length;
-    field.setSelectionRange(end, end);
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = draft.trim();
@@ -390,14 +374,23 @@ export function CircleDemoClient() {
                     </button>
                     {(["heart", "hug", "support"] as const).map((kind) => (
                       <button
-                        className={`circle-support-pill button-reset ${
+                        className={`circle-support-pill circle-support-pill-icon button-reset ${
+                          kind === "heart"
+                            ? "circle-support-pill-heart"
+                            : kind === "hug"
+                              ? "circle-support-pill-hug"
+                              : "circle-support-pill-support"
+                        } ${
                           reacted[`${index}`]?.[kind] ? "circle-support-pill-active" : ""
                         }`}
                         key={`${index}-${kind}`}
                         onClick={() => handleSupport(index, kind)}
                         type="button"
                       >
-                        <span className="circle-support-pill-label">
+                        <span aria-hidden="true" className="circle-support-pill-iconmark">
+                          {kind === "heart" ? "♥" : kind === "hug" ? "✦" : "☀"}
+                        </span>
+                        <span className="sr-only">
                           {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
                         </span>
                         <span className="circle-support-pill-count">{message.supports[kind]}</span>
@@ -427,21 +420,6 @@ export function CircleDemoClient() {
                 </button>
               </div>
             ) : null}
-
-            <div className="circle-mention-strip" aria-label="Mention a circle member">
-              {memberStatuses
-                .filter((member) => member.mentionAlias !== "You")
-                .map((member) => (
-                  <button
-                    className="circle-mention-chip button-reset"
-                    key={member.mentionAlias}
-                    onClick={() => handleMentionClick(member.mentionAlias)}
-                    type="button"
-                  >
-                    @{member.mentionAlias}
-                  </button>
-                ))}
-            </div>
 
             <form className="circle-demo-composer-row" onSubmit={handleSubmit}>
               <textarea
