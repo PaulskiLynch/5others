@@ -34,15 +34,37 @@ export default function CircleDemoPage() {
     <main className="cb-entry-page">
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
+          <div className="circle-topbar">
+            <details className="circle-menu">
+              <summary className="circle-topbar-button">☰</summary>
+              <div className="circle-menu-panel">
+                <span className="circle-menu-link">Your Circle</span>
+                <span className="circle-menu-link">Previous Circles</span>
+                <span className="circle-menu-link">Archive</span>
+                <span className="circle-menu-link">Settings</span>
+                <span className="circle-menu-link">Help</span>
+                <span className="circle-menu-link">Log out</span>
+              </div>
+            </details>
+
+            <p className="circle-topbar-brand">Cardio Bunny</p>
+            <span className="circle-topbar-button circle-topbar-settings">⚙</span>
+          </div>
+
           <header className="circle-room-header">
             <div className="circle-room-context circle-room-context-compact">
               <h1 className="circle-room-title">Your Circle</h1>
               <p className="circle-room-day">Tuesday</p>
-              <p className="circle-room-status">4 of 6 shared</p>
+              <p className="circle-room-status">Four people have checked in. Two are still finding their moment.</p>
             </div>
           </header>
 
           <section className="circle-room-panel">
+            <div className="circle-room-intent">
+              <p className="circle-room-intent-label">This week</p>
+              <p className="circle-room-intent-copy">Keep moving gently.</p>
+            </div>
+
             <div className="circle-feed">
               {demoMessages.map((message) => (
                 <article
@@ -74,11 +96,15 @@ export default function CircleDemoPage() {
                 <textarea
                   className="composer-textarea circle-journal-textarea"
                   placeholder="Share something small..."
-                  rows={2}
+                  rows={1}
                   readOnly
                 />
-                <button className="cb-submit button-reset circle-share-button circle-share-button-inline" type="button">
-                  <span>Send</span>
+                <button
+                  aria-label="Send"
+                  className="cb-submit button-reset circle-share-button circle-share-button-inline"
+                  type="button"
+                >
+                  <span>➜</span>
                 </button>
               </form>
             </section>
