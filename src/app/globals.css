@@ -961,6 +961,10 @@ h3 {
   padding: 0 6px;
 }
 
+.circle-topbar-simple {
+  grid-template-columns: 1fr;
+}
+
 .circle-topbar-brand {
   margin: 0;
   color: rgba(255, 239, 229, 0.84);
@@ -1261,6 +1265,49 @@ h3 {
 
 .circle-note-own .circle-note-time {
   color: rgba(33, 22, 11, 0.52);
+}
+
+.circle-footer-nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 6px 0;
+}
+
+.circle-footer-link {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 18px;
+  color: rgba(255, 239, 242, 0.72);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.72rem;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.circle-footer-link-active {
+  color: #f6d27b;
+  background: rgba(228, 178, 70, 0.1);
+  border: 1px solid rgba(228, 178, 70, 0.16);
+}
+
+.circle-footer-iconwrap {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.circle-footer-icon {
+  width: 20px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.16));
 }
 
 .circle-brand-ribbon {
@@ -1586,6 +1633,15 @@ h3 {
 [data-theme="light"] .circle-note-author,
 [data-theme="light"] .circle-note-time {
   color: rgba(43, 35, 31, 0.62);
+}
+
+[data-theme="light"] .circle-footer-link {
+  color: rgba(43, 35, 31, 0.72);
+  background: rgba(43, 35, 31, 0.04);
+}
+
+[data-theme="light"] .circle-footer-iconwrap {
+  background: rgba(43, 35, 31, 0.05);
 }
 
 .cb-entry-page {

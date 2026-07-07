@@ -4,10 +4,11 @@ import { useClerk } from "@clerk/nextjs";
 
 type SignOutActionProps = {
   className: string;
+  label?: string;
   redirectTo?: string;
 };
 
-export function SignOutAction({ className, redirectTo = "/sign-in" }: SignOutActionProps) {
+export function SignOutAction({ className, label = "Sign out", redirectTo = "/sign-in" }: SignOutActionProps) {
   const { signOut } = useClerk();
 
   return (
@@ -16,7 +17,7 @@ export function SignOutAction({ className, redirectTo = "/sign-in" }: SignOutAct
       onClick={() => signOut({ redirectUrl: redirectTo })}
       type="button"
     >
-      Sign out
+      {label}
     </button>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -123,32 +124,8 @@ export function CircleDemoClient() {
     <main className="cb-entry-page">
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
-          <div className="circle-topbar">
-            <details className="circle-menu">
-              <summary className="circle-topbar-button">Menu</summary>
-              <div className="circle-menu-panel">
-                <Link className="circle-menu-link" href="/circle-demo">
-                  Your Circle
-                </Link>
-                <Link className="circle-menu-link" href="/settings#members">
-                  Circle Members
-                </Link>
-                <Link className="circle-menu-link" href="/settings">
-                  Settings
-                </Link>
-                <a className="circle-menu-link" href="mailto:hello@5others.com">
-                  Help
-                </a>
-                <Link className="circle-menu-link" href="/sign-in">
-                  Log out
-                </Link>
-              </div>
-            </details>
-
+          <div className="circle-topbar circle-topbar-simple">
             <p className="circle-topbar-brand">Cardio Bunny</p>
-            <Link className="circle-topbar-button circle-topbar-settings" href="/settings">
-              Set
-            </Link>
           </div>
 
           <header className="circle-room-header">
@@ -215,6 +192,33 @@ export function CircleDemoClient() {
               </form>
             </section>
           </section>
+
+          <nav className="circle-footer-nav" aria-label="Circle footer navigation">
+            <Link className="circle-footer-link circle-footer-link-active" href="/circle-demo">
+              <span className="circle-footer-iconwrap" aria-hidden="true">
+                <Image alt="" className="circle-footer-icon" height={22} src="/cardiobunny-love-your-heart.png" width={22} />
+              </span>
+              <span>My Circle</span>
+            </Link>
+            <Link className="circle-footer-link" href="/settings#members">
+              <span className="circle-footer-iconwrap" aria-hidden="true">
+                <Image alt="" className="circle-footer-icon" height={22} src="/cardiobunny-love-your-heart.png" width={22} />
+              </span>
+              <span>Members</span>
+            </Link>
+            <Link className="circle-footer-link" href="/settings">
+              <span className="circle-footer-iconwrap" aria-hidden="true">
+                <Image alt="" className="circle-footer-icon" height={22} src="/cardiobunny-love-your-heart.png" width={22} />
+              </span>
+              <span>Settings</span>
+            </Link>
+            <Link className="circle-footer-link" href="/sign-in">
+              <span className="circle-footer-iconwrap" aria-hidden="true">
+                <Image alt="" className="circle-footer-icon" height={22} src="/cardiobunny-love-your-heart.png" width={22} />
+              </span>
+              <span>Log Out</span>
+            </Link>
+          </nav>
         </div>
       </section>
     </main>

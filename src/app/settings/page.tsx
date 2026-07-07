@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
 import { SignOutAction } from "@/components/auth/SignOutAction";
+import { CircleFooterNav } from "@/components/circle/CircleFooterNav";
 import { isLocalDevAuthEnabled, requireAuthenticatedUserEmail } from "@/lib/auth";
 import { getMyCircleView } from "@/lib/circle";
 
@@ -18,12 +18,8 @@ export default async function SettingsPage() {
     <main className="cb-entry-page">
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
-          <div className="circle-topbar">
-            <Link className="circle-topbar-button" href="/my-circle">
-              Back
-            </Link>
+          <div className="circle-topbar circle-topbar-simple">
             <p className="circle-topbar-brand">Cardio Bunny</p>
-            <span className="circle-topbar-button circle-topbar-settings">⚙</span>
           </div>
 
           <div className="circle-brand-ribbon">
@@ -94,6 +90,8 @@ export default async function SettingsPage() {
               </section>
             </div>
           </div>
+
+          <CircleFooterNav active="settings" showDevSignOut={showDevSignOut} />
         </div>
       </section>
     </main>
