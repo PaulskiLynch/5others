@@ -3722,3 +3722,101 @@ h3 {
     height: 54px;
   }
 }
+
+@media (max-width: 640px) {
+  .circle-demo-shell {
+    width: 100%;
+    padding: 14px 10px 22px;
+  }
+
+  .circle-demo-phone {
+    gap: 14px;
+    padding: 16px 12px 14px;
+    border-radius: 28px;
+  }
+
+  .circle-demo-topbar {
+    grid-template-columns: 46px 1fr 46px;
+    gap: 10px;
+  }
+
+  .circle-demo-iconbutton {
+    width: 46px;
+    height: 46px;
+    font-size: 1.3rem;
+  }
+
+  .circle-demo-heading h1 {
+    font-size: 2.4rem;
+  }
+
+  .circle-demo-members {
+    gap: 12px;
+    padding: 0 2px 4px;
+    justify-content: flex-start;
+  }
+
+  .circle-demo-member {
+    width: 52px;
+    height: 52px;
+  }
+
+  .circle-demo-feed {
+    gap: 16px;
+    padding: 8px 8px 10px;
+  }
+
+  .circle-demo-message-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .circle-demo-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .circle-demo-message-stack {
+    max-width: 100%;
+  }
+
+  .circle-demo-message-row-own .circle-demo-message-stack {
+    max-width: 84%;
+  }
+
+  .circle-demo-bubble {
+    max-width: 100%;
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+
+  .circle-demo-bubble-copy {
+    font-size: 0.98rem;
+    line-height: 1.45;
+  }
+
+  .circle-demo-name {
+    font-size: 0.88rem;
+  }
+
+  .circle-demo-composer {
+    padding: 12px 10px 8px;
+  }
+
+  .circle-demo-composer-row {
+    grid-template-columns: minmax(0, 1fr) 52px;
+    gap: 10px;
+  }
+
+  .circle-demo-input {
+    min-height: 54px;
+    padding: 14px 18px;
+    font-size: 0.98rem;
+  }
+
+  .circle-demo-send {
+    width: 52px;
+    height: 52px;
+    font-size: 1.45rem;
+  }
+}
