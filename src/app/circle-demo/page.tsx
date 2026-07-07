@@ -1,6 +1,7 @@
 const demoMessages = [
   {
     author: "Silver Cottontail",
+    accentColor: "#D9B38C",
     time: "9:15 AM",
     body: "I restarted my morning walk today.\n\nOnly twelve minutes but it counted.",
     own: false,
@@ -8,6 +9,7 @@ const demoMessages = [
   },
   {
     author: "Gentle Cottontail",
+    accentColor: "#CFA1B9",
     time: "9:16 AM",
     body: "That absolutely counts.\n\nI'm beginning again too.",
     own: false,
@@ -15,6 +17,7 @@ const demoMessages = [
   },
   {
     author: "You",
+    accentColor: "#D9A957",
     time: "9:22 AM",
     body: "Mine is simply shoes on.\n\nNo promises beyond that.",
     own: true,
@@ -22,12 +25,46 @@ const demoMessages = [
   },
   {
     author: "Open Cottontail",
+    accentColor: "#9CB9A4",
     time: "9:24 AM",
     body: "That feels like enough for today. Outside is usually the hardest part for me too.",
     own: false,
     grouped: false,
   },
 ];
+
+function hexToRgb(hex: string) {
+  const normalized = hex.replace("#", "");
+  const full = normalized.length === 3
+    ? normalized.split("").map((value) => `${value}${value}`).join("")
+    : normalized;
+  const value = Number.parseInt(full, 16);
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function bubbleStyle(accentColor: string) {
+  const { r, g, b } = hexToRgb(accentColor);
+
+  return {
+    background: `linear-gradient(180deg, rgba(${r}, ${g}, ${b}, 0.28), rgba(${r}, ${g}, ${b}, 0.18))`,
+    borderColor: `rgba(${r}, ${g}, ${b}, 0.32)`,
+  };
+}
+
+function avatarStyle(accentColor: string) {
+  const { r, g, b } = hexToRgb(accentColor);
+
+  return {
+    background: `rgba(${r}, ${g}, ${b}, 0.24)`,
+    color: `rgb(${Math.max(28, r - 36)} ${Math.max(24, g - 36)} ${Math.max(20, b - 36)})`,
+    borderColor: `rgba(${r}, ${g}, ${b}, 0.32)`,
+  };
+}
 
 export default function CircleDemoPage() {
   return (
@@ -74,11 +111,14 @@ export default function CircleDemoPage() {
                   key={`${message.author}-${message.time}`}
                 >
                   {!message.own ? (
-                    <span className="circle-chat-avatar" aria-hidden="true">
+                    <span className="circle-chat-avatar" aria-hidden="true" style={avatarStyle(message.accentColor)}>
                       {message.author.slice(0, 1)}
                     </span>
                   ) : null}
-                  <div className={`circle-note ${message.own ? "circle-note-own" : "circle-note-peer"}`}>
+                  <div
+                    className={`circle-note ${message.own ? "circle-note-own" : "circle-note-peer"}`}
+                    style={bubbleStyle(message.accentColor)}
+                  >
                     <p className="circle-note-author">{message.author}</p>
                     <p className="circle-note-body">{message.body}</p>
                     <p className="circle-note-time">{message.time}</p>

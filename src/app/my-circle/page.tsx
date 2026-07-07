@@ -15,6 +15,39 @@ type MyCirclePageProps = {
   }>;
 };
 
+function hexToRgb(hex: string) {
+  const normalized = hex.replace("#", "");
+  const full = normalized.length === 3
+    ? normalized.split("").map((value) => `${value}${value}`).join("")
+    : normalized;
+  const value = Number.parseInt(full, 16);
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function bubbleStyle(accentColor: string) {
+  const { r, g, b } = hexToRgb(accentColor);
+
+  return {
+    background: `linear-gradient(180deg, rgba(${r}, ${g}, ${b}, 0.28), rgba(${r}, ${g}, ${b}, 0.18))`,
+    borderColor: `rgba(${r}, ${g}, ${b}, 0.32)`,
+  };
+}
+
+function avatarStyle(accentColor: string) {
+  const { r, g, b } = hexToRgb(accentColor);
+
+  return {
+    background: `rgba(${r}, ${g}, ${b}, 0.24)`,
+    color: `rgb(${Math.max(28, r - 36)} ${Math.max(24, g - 36)} ${Math.max(20, b - 36)})`,
+    borderColor: `rgba(${r}, ${g}, ${b}, 0.32)`,
+  };
+}
+
 export default async function MyCirclePage({ searchParams }: MyCirclePageProps) {
   const email = await requireAuthenticatedUserEmail();
   const entryState = await getMemberEntryState(email);
@@ -102,11 +135,14 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                   key={message.id}
                 >
                   {!message.isOwn ? (
-                    <span className="circle-chat-avatar" aria-hidden="true">
+                    <span className="circle-chat-avatar" aria-hidden="true" style={avatarStyle(message.accentColor)}>
                       {message.authorName.slice(0, 1)}
                     </span>
                   ) : null}
-                  <div className={`circle-note ${message.isOwn ? "circle-note-own" : "circle-note-peer"}`}>
+                  <div
+                    className={`circle-note ${message.isOwn ? "circle-note-own" : "circle-note-peer"}`}
+                    style={bubbleStyle(message.accentColor)}
+                  >
                     <p className="circle-note-author">{message.authorName}</p>
                     <p className="circle-note-body">{message.body}</p>
                     <p className="circle-note-time">{message.relativeTime}</p>
