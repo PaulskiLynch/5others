@@ -1,12 +1,3 @@
-const demoMembers = [
-  { name: "Silver Cottontail", initial: "S", shared: true, self: false },
-  { name: "Gentle Cottontail", initial: "G", shared: true, self: false },
-  { name: "Brave Cottontail", initial: "B", shared: false, self: false },
-  { name: "Open Cottontail", initial: "O", shared: true, self: false },
-  { name: "Calm Cottontail", initial: "C", shared: false, self: false },
-  { name: "You", initial: "Y", shared: true, self: true },
-];
-
 const demoMessages = [
   {
     author: "Silver Cottontail",
@@ -44,38 +35,14 @@ export default function CircleDemoPage() {
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
           <header className="circle-room-header">
-            <span className="circle-header-link">← Back</span>
             <div className="circle-room-context circle-room-context-compact">
               <h1 className="circle-room-title">Your Circle</h1>
-              <div className="circle-room-meta">
-                <span>Day 3 of 7</span>
-                <span>4/6 checked in today</span>
-              </div>
+              <p className="circle-room-day">Tuesday</p>
+              <p className="circle-room-status">4 of 6 shared</p>
             </div>
-            <span className="circle-settings-link">⚙ Settings</span>
           </header>
 
           <section className="circle-room-panel">
-            <div className="circle-member-strip" aria-label="Circle members">
-              {demoMembers.map((member) => (
-                <div className="circle-member-pill" key={member.name} title={member.name}>
-                  <span
-                    className={`circle-member-avatar ${
-                      member.self
-                        ? "circle-member-avatar-self"
-                        : member.shared
-                          ? "circle-member-avatar-posted"
-                          : "circle-member-avatar-quiet"
-                    }`}
-                    aria-hidden="true"
-                  >
-                    {member.initial}
-                  </span>
-                  <span className="circle-member-pill-label">{member.self ? "You" : member.initial}</span>
-                </div>
-              ))}
-            </div>
-
             <div className="circle-feed">
               {demoMessages.map((message) => (
                 <article
@@ -100,7 +67,6 @@ export default function CircleDemoPage() {
 
             <section className="circle-composer-card circle-composer-sticky">
               <div className="circle-composer-head">
-                <p className="circle-composer-kicker">Today&apos;s check-in</p>
                 <h2>What&apos;s the smallest promise you can honestly keep today?</h2>
               </div>
 

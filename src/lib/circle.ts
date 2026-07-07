@@ -39,6 +39,7 @@ type MessageRow = {
 export type CircleViewModel = {
   category: string;
   checkedInTodayCount: number;
+  dayName: string;
   dayLabel: string;
   dayNumber: number;
   hasPostedToday: boolean;
@@ -97,6 +98,8 @@ const weekdayPrompts = [
   "Celebrate even the tiny wins.",
   "Take a quiet moment to reflect.",
 ] as const;
+
+const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as const;
 
 const weekdayPromptTitles = [
   "Today's reflection",
@@ -629,6 +632,7 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
   return {
     category: circle.category.replaceAll("_", " "),
     checkedInTodayCount,
+    dayName: weekdayNames[weekdayIndex],
     dayLabel: weekdayPrompts[weekdayIndex],
     dayNumber: getDayNumberInWeek(weekStart, timeZone),
     hasPostedToday,

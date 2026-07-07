@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
@@ -39,54 +38,21 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
           <header className="circle-room-header">
-            <Link className="circle-header-link" href="/">
-              ← Back
-            </Link>
-
             <div className="circle-room-context circle-room-context-compact">
               <h1 className="circle-room-title">Your Circle</h1>
-              <div className="circle-room-meta">
-                <span>Day {circle.dayNumber} of 7</span>
-                <span>{circle.checkedInTodayCount}/6 checked in today</span>
-              </div>
+              <p className="circle-room-day">{circle.dayName}</p>
+              <p className="circle-room-status">{circle.checkedInTodayCount} of 6 shared</p>
             </div>
-
-            <div className="circle-room-settings">
-              {showDevSignOut ? (
-                <form action={stopDeveloperSession}>
-                  <button className="circle-settings-link button-reset" type="submit">
-                    leave
-                  </button>
-                </form>
-              ) : (
-                <Link className="circle-settings-link" href="/settings">
-                  ⚙ Settings
-                </Link>
-              )}
-            </div>
+            {showDevSignOut ? (
+              <form action={stopDeveloperSession}>
+                <button className="circle-settings-link button-reset" type="submit">
+                  leave
+                </button>
+              </form>
+            ) : null}
           </header>
 
           <section className="circle-room-panel">
-            <div className="circle-member-strip" aria-label="Circle members">
-              {circle.memberships.map((member) => (
-                <div className="circle-member-pill" key={member.id} title={member.isYou ? "You" : member.pseudonym}>
-                  <span
-                    className={`circle-member-avatar ${
-                      member.isYou
-                        ? "circle-member-avatar-self"
-                        : member.hasPostedToday
-                          ? "circle-member-avatar-posted"
-                          : "circle-member-avatar-quiet"
-                    }`}
-                    aria-hidden="true"
-                  >
-                    {member.isYou ? "Y" : member.pseudonym.slice(0, 1)}
-                  </span>
-                  <span className="circle-member-pill-label">{member.isYou ? "You" : member.pseudonym.slice(0, 1)}</span>
-                </div>
-              ))}
-            </div>
-
             <div className="circle-feed">
               {circle.messages.map((message) => (
                 <article
@@ -113,7 +79,6 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
               {error ? <p className="error-banner">{error}</p> : null}
 
               <div className="circle-composer-head">
-                <p className="circle-composer-kicker">Today&apos;s check-in</p>
                 <h2>{circle.prompt}</h2>
               </div>
 

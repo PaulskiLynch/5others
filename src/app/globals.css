@@ -943,43 +943,32 @@ h3 {
 .circle-focus-shell {
   width: min(820px, calc(100% - 22px));
   margin: 0 auto;
-  padding: 8px 0 18px;
+  padding: 6px 0 12px;
 }
 
 .circle-room-shell {
   width: min(800px, 100%);
   margin: 0 auto;
-  padding: 0 0 14px;
+  padding: 0 0 8px;
 }
 
 .circle-room-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  display: block;
   min-height: 64px;
-  margin-bottom: 6px;
-  padding: 0 8px;
-}
-
-.circle-header-link {
-  color: rgba(255, 245, 235, 0.7);
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.88rem;
-  text-decoration: none;
-  white-space: nowrap;
+  margin-bottom: 2px;
+  padding: 2px 8px 0;
 }
 
 .circle-settings-link {
   color: rgba(255, 245, 235, 0.68);
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
 .circle-room-panel {
-  padding: 8px 8px 0;
+  padding: 0 6px 0;
   border-radius: 0;
   border: 0;
   background: transparent;
@@ -989,9 +978,8 @@ h3 {
 
 .circle-room-context {
   display: grid;
-  gap: 2px;
+  gap: 1px;
   justify-items: center;
-  flex: 1 1 auto;
 }
 
 .circle-room-context-compact {
@@ -1005,74 +993,31 @@ h3 {
 .circle-room-title {
   margin: 0;
   color: #fbf5ee;
-  font-size: 1rem;
+  font-size: 0.96rem;
   line-height: 1.1;
 }
 
-.circle-room-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px 12px;
-  color: rgba(255, 245, 235, 0.56);
+.circle-room-day,
+.circle-room-status {
+  margin: 0;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.74rem;
 }
 
-.circle-member-strip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 4px 12px;
-}
-
-.circle-member-pill {
-  display: grid;
-  justify-items: center;
-  gap: 4px;
-  min-width: 34px;
-}
-
-.circle-member-avatar {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  flex: 0 0 auto;
-}
-
-.circle-member-avatar-posted {
-  background: #4d8f67;
-  color: #f7f4ed;
-}
-
-.circle-member-avatar-quiet {
-  background: rgba(255, 255, 255, 0.18);
+.circle-room-day {
   color: rgba(255, 245, 235, 0.74);
+  font-size: 0.8rem;
 }
 
-.circle-member-avatar-self {
-  background: #7c5cff;
-  color: #ffffff;
-}
-
-.circle-member-pill-label {
+.circle-room-status {
   color: rgba(255, 245, 235, 0.58);
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.64rem;
-  line-height: 1;
+  font-size: 0.72rem;
 }
 
 .circle-composer-card {
-  margin-top: 10px;
-  padding: 12px 10px calc(12px + env(safe-area-inset-bottom, 0px));
+  margin-top: 8px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(255, 245, 235, 0.08);
-  background: linear-gradient(180deg, rgba(13, 11, 14, 0.8), rgba(13, 11, 14, 0.96));
+  background: linear-gradient(180deg, rgba(13, 11, 14, 0.72), rgba(13, 11, 14, 0.94));
   backdrop-filter: blur(14px);
 }
 
@@ -1085,22 +1030,13 @@ h3 {
 .circle-composer-head h2 {
   margin: 0;
   color: #fbf5ee;
-  font-size: 0.94rem;
+  font-size: 0.86rem;
   line-height: 1.45;
 }
 
-.circle-composer-kicker {
-  margin: 0 0 4px;
-  color: rgba(255, 245, 235, 0.54);
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .circle-composer-form {
-  margin-top: 10px;
-  gap: 10px;
+  margin-top: 8px;
+  gap: 8px;
 }
 
 .circle-composer-form-inline {
@@ -1110,15 +1046,15 @@ h3 {
 }
 
 .circle-journal-textarea {
-  min-height: 52px;
-  max-height: 120px;
-  padding: 14px 15px;
+  min-height: 44px;
+  max-height: 96px;
+  padding: 11px 13px;
   border: 1px solid rgba(255, 245, 235, 0.08);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.045);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.038);
   color: #fff6f0;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.42;
   resize: none;
 }
 
@@ -1134,22 +1070,22 @@ h3 {
 
 .circle-feed {
   display: grid;
-  gap: 4px;
+  gap: 1px;
   min-height: 52vh;
-  margin-top: 4px;
-  padding: 4px 2px 10px;
+  margin-top: 2px;
+  padding: 2px 2px 6px;
 }
 
 .circle-chat-row {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .circle-chat-row-grouped {
-  margin-top: 3px;
+  margin-top: 1px;
 }
 
 .circle-chat-row-peer {
@@ -1163,40 +1099,40 @@ h3 {
 .circle-chat-avatar {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  margin-bottom: 4px;
+  width: 22px;
+  height: 22px;
+  margin-bottom: 2px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 245, 235, 0.82);
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 245, 235, 0.7);
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.64rem;
   font-weight: 700;
   flex: 0 0 auto;
 }
 
 .circle-note {
   width: fit-content;
-  max-width: 70%;
-  padding: 9px 11px 8px;
-  border-radius: 18px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  max-width: 68%;
+  padding: 7px 10px 6px;
+  border-radius: 16px;
+  box-shadow: none;
 }
 
 .circle-note-peer {
-  background: linear-gradient(180deg, rgba(247, 239, 231, 0.96), rgba(242, 232, 220, 0.94));
+  background: linear-gradient(180deg, rgba(246, 238, 230, 0.94), rgba(241, 232, 221, 0.92));
   color: #241d18;
 }
 
 .circle-note-own {
-  background: linear-gradient(180deg, rgba(232, 197, 132, 0.96), rgba(219, 178, 103, 0.94));
+  background: linear-gradient(180deg, rgba(229, 198, 142, 0.94), rgba(219, 184, 122, 0.92));
   color: #21160b;
 }
 
 .circle-note-author {
   margin: 0;
   color: rgba(46, 33, 28, 0.72);
-  font-size: 0.74rem;
+  font-size: 0.68rem;
   line-height: 1.25;
 }
 
@@ -1205,17 +1141,17 @@ h3 {
 }
 
 .circle-note-body {
-  margin: 4px 0 0;
-  font-size: 0.95rem;
-  line-height: 1.45;
+  margin: 3px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
   white-space: pre-line;
 }
 
 .circle-note-time {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
   color: rgba(46, 33, 28, 0.48);
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   line-height: 1.2;
 }
 
@@ -2795,7 +2731,7 @@ h3 {
   }
 
   .circle-journal-textarea {
-    min-height: 48px;
+    min-height: 42px;
   }
 
   .circle-composer-form-inline {
@@ -2807,7 +2743,7 @@ h3 {
   }
 
   .circle-note {
-    max-width: 82%;
+    max-width: 80%;
   }
 
   .cb-feature-row {
