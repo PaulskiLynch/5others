@@ -106,6 +106,20 @@ const mentionDirectory = new Map([
 
 const DEMO_STORAGE_KEY = "cardiobunny-demo-circle-v3";
 
+function persistDemoState(messages: DemoMessage[], reacted: Record<string, SupportState>) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(
+    DEMO_STORAGE_KEY,
+    JSON.stringify({
+      messages,
+      reacted,
+    })
+  );
+}
+
 function getInitialDemoState() {
   if (typeof window === "undefined") {
     return {
@@ -207,13 +221,7 @@ export function CircleDemoClient() {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      DEMO_STORAGE_KEY,
-      JSON.stringify({
-        messages,
-        reacted,
-      })
-    );
+    persistDemoState(messages, reacted);
   }, [messages, reacted]);
 
   useEffect(() => {
@@ -221,6 +229,30 @@ export function CircleDemoClient() {
       feedEndRef.current?.scrollIntoView({ block: "end" });
     });
   }, [messages.length]);
+
+  useEffect(() => {
+    function handleStorage(event: StorageEvent) {
+      if (event.key !== DEMO_STORAGE_KEY || !event.newValue) {
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(event.newValue) as {
+          messages?: DemoMessage[];
+          reacted?: Record<string, SupportState>;
+        };
+
+        if (parsed.messages?.length) {
+          setMessages(parsed.messages);
+        }
+
+        setReacted(parsed.reacted ?? {});
+      } catch {}
+    }
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -232,8 +264,8 @@ export function CircleDemoClient() {
 
     const replyTarget = replyToIndex !== null ? messages[replyToIndex] : null;
 
-    setMessages((current) => [
-      ...current,
+    const nextMessages = [
+      ...messages,
       {
         author: "You",
         avatarSrc: "/demo-bunnies/bunny-2.png",
@@ -249,7 +281,10 @@ export function CircleDemoClient() {
         supports: { heart: 0, hug: 0, support: 0 },
         time: getTimeLabel(),
       },
-    ]);
+    ];
+
+    setMessages(nextMessages);
+    persistDemoState(nextMessages, reacted);
     setDraft("");
     setReplyToIndex(null);
   }
@@ -258,29 +293,31 @@ export function CircleDemoClient() {
     const messageKey = `${messageIndex}`;
     const hasReacted = reacted[messageKey]?.[kind] ?? false;
 
-    setMessages((current) =>
-      current.map((message, index) =>
-        index === messageIndex
-          ? {
-              ...message,
-              supports: {
-                ...message.supports,
-                [kind]: Math.max(0, message.supports[kind] + (hasReacted ? -1 : 1)),
-              },
-            }
-          : message
-      )
+    const nextMessages = messages.map((message, index) =>
+      index === messageIndex
+        ? {
+            ...message,
+            supports: {
+              ...message.supports,
+              [kind]: Math.max(0, message.supports[kind] + (hasReacted ? -1 : 1)),
+            },
+          }
+        : message
     );
 
-    setReacted((current) => ({
-      ...current,
+    const nextReacted = {
+      ...reacted,
       [messageKey]: {
-        heart: current[messageKey]?.heart ?? false,
-        hug: current[messageKey]?.hug ?? false,
-        support: current[messageKey]?.support ?? false,
+        heart: reacted[messageKey]?.heart ?? false,
+        hug: reacted[messageKey]?.hug ?? false,
+        support: reacted[messageKey]?.support ?? false,
         [kind]: !hasReacted,
       },
-    }));
+    };
+
+    setMessages(nextMessages);
+    setReacted(nextReacted);
+    persistDemoState(nextMessages, nextReacted);
   }
 
   function handleReply(messageIndex: number) {
@@ -293,6 +330,7 @@ export function CircleDemoClient() {
     setReacted({});
     setDraft("");
     setReplyToIndex(null);
+    persistDemoState(initialMessages, {});
     window.localStorage.removeItem(DEMO_STORAGE_KEY);
   }
 
