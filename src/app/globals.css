@@ -1279,32 +1279,32 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .circle-support-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 9px;
+  padding: 4px 9px;
   border-radius: 999px;
-  border: 1px solid rgba(46, 33, 28, 0.12);
-  background: rgba(255, 255, 255, 0.36);
-  color: rgba(46, 33, 28, 0.74);
+  border: 1px solid rgba(46, 33, 28, 0.08);
+  background: rgba(255, 255, 255, 0.22);
+  color: rgba(46, 33, 28, 0.72);
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   line-height: 1;
 }
 
 .circle-support-pill-icon {
-  min-width: 34px;
+  min-width: 36px;
   justify-content: center;
-  padding: 5px 8px;
+  padding: 4px 8px;
   border-width: 1px;
 }
 
 .circle-support-pill-iconmark {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1;
 }
 
@@ -1327,35 +1327,12 @@ h3 {
 }
 
 .circle-support-pill-active {
-  border-color: rgba(216, 168, 59, 0.32);
-  background: rgba(216, 168, 59, 0.18);
-  color: rgba(54, 32, 7, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .circle-support-pill-count {
   min-width: 10px;
   font-weight: 700;
-}
-
-.circle-mention-strip {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.circle-mention-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 245, 235, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 245, 235, 0.78);
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 0.72rem;
-  line-height: 1;
 }
 
 .circle-footer-nav {
@@ -1568,7 +1545,7 @@ h3 {
   display: grid;
   gap: 10px;
   min-height: 48vh;
-  padding: 2px 2px 4px;
+  padding: 2px 2px 12px;
 }
 
 .circle-demo-message-row {
@@ -1670,17 +1647,10 @@ h3 {
   position: sticky;
   bottom: 0;
   display: grid;
-  gap: 10px;
-  padding: 10px 0 0;
+  gap: 8px;
+  padding: 8px 0 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background: linear-gradient(180deg, rgba(26, 20, 25, 0.4), #1a1419 34%);
-}
-
-.circle-demo-prompt {
-  margin: 0;
-  color: rgba(255, 242, 230, 0.84);
-  font-size: 0.82rem;
-  line-height: 1.42;
+  background: linear-gradient(180deg, rgba(26, 20, 25, 0.1), #1a1419 22%);
 }
 
 .circle-demo-replying {
@@ -1701,12 +1671,12 @@ h3 {
 
 .circle-demo-input {
   width: 100%;
-  min-height: 44px;
-  max-height: 96px;
-  padding: 12px 14px;
-  border: 1px solid rgba(255, 243, 229, 0.08);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  min-height: 42px;
+  max-height: 92px;
+  padding: 11px 13px;
+  border: 1px solid rgba(255, 243, 229, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
   color: #fff8f2;
   font: inherit;
   line-height: 1.4;
@@ -1716,8 +1686,8 @@ h3 {
 .circle-demo-send {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   border: 0;
   border-radius: 999px;

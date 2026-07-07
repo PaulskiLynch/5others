@@ -88,12 +88,12 @@ const initialMessages: DemoMessage[] = [
 ];
 
 const memberStatuses = [
-  { author: "Silver Cottontail", mentionAlias: "SilverBunny", src: "/demo-bunnies/bunny-1.png" },
-  { author: "Gentle Cottontail", mentionAlias: "GentleBunny", src: "/demo-bunnies/bunny-3.png" },
-  { author: "Brave Cottontail", mentionAlias: "BraveBunny", src: "/demo-bunnies/bunny-6.png" },
-  { author: "Open Cottontail", mentionAlias: "OpenBunny", src: "/demo-bunnies/bunny-5.png" },
-  { author: "Calm Cottontail", mentionAlias: "CalmBunny", src: "/demo-bunnies/bunny-4.png" },
-  { author: "You", mentionAlias: "You", src: "/demo-bunnies/bunny-2.png" },
+  { author: "Silver Cottontail", src: "/demo-bunnies/bunny-1.png" },
+  { author: "Gentle Cottontail", src: "/demo-bunnies/bunny-3.png" },
+  { author: "Brave Cottontail", src: "/demo-bunnies/bunny-6.png" },
+  { author: "Open Cottontail", src: "/demo-bunnies/bunny-5.png" },
+  { author: "Calm Cottontail", src: "/demo-bunnies/bunny-4.png" },
+  { author: "You", src: "/demo-bunnies/bunny-2.png" },
 ] as const;
 
 const mentionDirectory = new Map([
@@ -104,7 +104,7 @@ const mentionDirectory = new Map([
   ["calmbunny", "CalmBunny"],
 ]);
 
-const DEMO_STORAGE_KEY = "cardiobunny-demo-circle-v2";
+const DEMO_STORAGE_KEY = "cardiobunny-demo-circle-v3";
 
 function getInitialDemoState() {
   if (typeof window === "undefined") {
@@ -203,6 +203,7 @@ export function CircleDemoClient() {
     () => getInitialDemoState().reacted
   );
   const [replyToIndex, setReplyToIndex] = useState<number | null>(null);
+  const feedEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -214,6 +215,12 @@ export function CircleDemoClient() {
       })
     );
   }, [messages, reacted]);
+
+  useEffect(() => {
+    window.requestAnimationFrame(() => {
+      feedEndRef.current?.scrollIntoView({ block: "end" });
+    });
+  }, [messages.length]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -304,7 +311,7 @@ export function CircleDemoClient() {
             <div className="circle-demo-heading">
               <p className="circle-demo-brand">Cardio Bunny</p>
               <h1>Your Circle</h1>
-              <p>4 of 6 checked in today</p>
+              <p>{seenTodayAuthors.size} of 6 checked in today</p>
             </div>
 
             <Link aria-label="Settings" className="circle-demo-iconbutton" href="/settings">
@@ -328,11 +335,6 @@ export function CircleDemoClient() {
               </span>
             ))}
           </div>
-
-          <section className="circle-demo-pinned">
-            <p className="circle-demo-pinned-label">This week</p>
-            <p className="circle-demo-pinned-copy">Keep moving gently. Small counts.</p>
-          </section>
 
           <section className="circle-demo-feed" aria-label="Circle conversation">
             {messages.map((message, index) => (
@@ -380,15 +382,13 @@ export function CircleDemoClient() {
                             : kind === "hug"
                               ? "circle-support-pill-hug"
                               : "circle-support-pill-support"
-                        } ${
-                          reacted[`${index}`]?.[kind] ? "circle-support-pill-active" : ""
-                        }`}
+                        } ${reacted[`${index}`]?.[kind] ? "circle-support-pill-active" : ""}`}
                         key={`${index}-${kind}`}
                         onClick={() => handleSupport(index, kind)}
                         type="button"
                       >
                         <span aria-hidden="true" className="circle-support-pill-iconmark">
-                          {kind === "heart" ? "♥" : kind === "hug" ? "✦" : "☀"}
+                          {kind === "heart" ? "\u2665" : kind === "hug" ? "\u2726" : "\u2600"}
                         </span>
                         <span className="sr-only">
                           {kind === "heart" ? "Heart" : kind === "hug" ? "Hug" : "Support"}
@@ -400,11 +400,10 @@ export function CircleDemoClient() {
                 </div>
               </article>
             ))}
+            <div ref={feedEndRef} />
           </section>
 
           <section className="circle-demo-composer">
-            <p className="circle-demo-prompt">What&apos;s the smallest promise you can honestly keep today?</p>
-
             {replyTarget ? (
               <div className="circle-demo-replying">
                 <div>
@@ -425,7 +424,7 @@ export function CircleDemoClient() {
               <textarea
                 className="circle-demo-input"
                 onChange={(event) => setDraft(event.target.value)}
-                placeholder="Share something small..."
+                placeholder="Share something small. What can you honestly do today?"
                 ref={textareaRef}
                 rows={1}
                 value={draft}
