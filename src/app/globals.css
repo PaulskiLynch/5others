@@ -1654,6 +1654,214 @@ h3 {
   color: #f7f1ea;
 }
 
+.cb-simple-shell {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: 24px 18px 32px;
+}
+
+.cb-simple-phone {
+  display: grid;
+  gap: 18px;
+  padding: 14px 0 8px;
+}
+
+.cb-simple-logo {
+  display: flex;
+  justify-content: center;
+}
+
+.cb-simple-logo-image {
+  width: min(100%, 220px);
+  height: auto;
+}
+
+.cb-simple-hero {
+  text-align: center;
+}
+
+.cb-simple-title {
+  max-width: 11ch;
+  margin: 0 auto;
+  color: #f8f2eb;
+  font-size: clamp(2.4rem, 9vw, 4rem);
+  line-height: 0.95;
+}
+
+.cb-simple-copy {
+  max-width: 25ch;
+  margin: 14px auto 0;
+  color: rgba(255, 245, 235, 0.78);
+  font-size: clamp(1rem, 3.6vw, 1.15rem);
+  line-height: 1.48;
+}
+
+.cb-simple-features {
+  display: grid;
+  gap: 14px;
+}
+
+.cb-simple-feature {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.cb-simple-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 178, 70, 0.22);
+  color: #d8b252;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 1rem;
+}
+
+.cb-simple-feature-title,
+.cb-simple-auth-title,
+.cb-safety-title {
+  margin: 0;
+  color: #fbf5ee;
+}
+
+.cb-simple-feature-title {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.cb-simple-feature-copy {
+  margin: 4px 0 0;
+  color: rgba(255, 245, 235, 0.7);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.cb-safety-card,
+.cb-simple-auth {
+  border: 1px solid rgba(228, 178, 70, 0.14);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+}
+
+.cb-safety-card {
+  padding: 18px 18px 20px;
+}
+
+.cb-safety-title {
+  text-align: center;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.cb-safety-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.cb-safety-bunny {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 31, 21, 0.12);
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cb-safety-bunny-ears::before,
+.cb-safety-bunny-ears::after,
+.cb-safety-bunny-face::before,
+.cb-safety-bunny-face::after {
+  content: "";
+  position: absolute;
+}
+
+.cb-safety-bunny-ears::before,
+.cb-safety-bunny-ears::after {
+  top: -10px;
+  width: 10px;
+  height: 16px;
+  border-radius: 999px 999px 6px 6px;
+  background: inherit;
+  border: 1px solid rgba(42, 31, 21, 0.12);
+}
+
+.cb-safety-bunny-ears::before {
+  left: 6px;
+  transform: rotate(-12deg);
+}
+
+.cb-safety-bunny-ears::after {
+  right: 6px;
+  transform: rotate(12deg);
+}
+
+.cb-safety-bunny-face::before,
+.cb-safety-bunny-face::after {
+  top: 13px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(64, 46, 44, 0.75);
+}
+
+.cb-safety-bunny-face::before {
+  left: 11px;
+}
+
+.cb-safety-bunny-face::after {
+  right: 11px;
+}
+
+.cb-simple-auth {
+  padding: 22px 18px 18px;
+}
+
+.cb-simple-auth-head {
+  display: grid;
+  gap: 8px;
+  text-align: center;
+}
+
+.cb-simple-auth-title {
+  font-size: clamp(1.55rem, 6vw, 2.15rem);
+  line-height: 1.1;
+}
+
+.cb-simple-auth-subtitle,
+.cb-simple-auth-foot,
+.cb-simple-footer {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.cb-simple-auth-subtitle {
+  margin: 0;
+  color: rgba(255, 245, 235, 0.66);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.cb-simple-auth .clerk-shell-cardiobunny {
+  margin-top: 18px;
+}
+
+.cb-simple-auth-foot {
+  margin: 14px 0 0;
+  color: rgba(255, 245, 235, 0.62);
+  text-align: center;
+  font-size: 0.78rem;
+}
+
+.cb-simple-footer {
+  color: rgba(255, 245, 235, 0.56);
+  text-align: center;
+  font-size: 0.78rem;
+}
+
 .cb-entry-shell {
   width: min(1240px, calc(100% - 56px));
   margin: 0 auto;
@@ -2401,10 +2609,33 @@ h3 {
 }
 
 .cb-waiting-checklist p {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
   margin: 0;
   color: rgba(255, 245, 235, 0.78);
   font-size: 0.94rem;
   line-height: 1.5;
+}
+
+.cb-waiting-check {
+  position: relative;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.cb-waiting-check::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border-right: 2px solid #e4b246;
+  border-bottom: 2px solid #e4b246;
+  transform: rotate(40deg);
 }
 
 .cb-waiting-card {

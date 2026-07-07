@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 import { getRequestBrandKey } from "@/lib/brand";
 
@@ -29,24 +29,34 @@ function formatWeekDate(date?: string) {
   }).format(parsed);
 }
 
+function SharedStartNote() {
+  return (
+    <>
+      <p className="cb-waiting-note-title">Why everyone starts together</p>
+      <p>We believe every circle should begin at the same moment.</p>
+      <p>Starting together means every member feels included from the very first conversation.</p>
+      <p>No catching up.</p>
+      <p>No joining halfway through.</p>
+      <p>Just six people beginning together.</p>
+    </>
+  );
+}
+
+function WaitingCheck({ children }: { children: string }) {
+  return (
+    <p>
+      <span aria-hidden="true" className="cb-waiting-check" />
+      <span>{children}</span>
+    </p>
+  );
+}
+
 export default async function WaitingPage({ searchParams }: WaitingPageProps) {
   const { weekStart, weekEnd, mode, band } = await searchParams;
   const brand = await getRequestBrandKey();
   const formattedWeekStart = formatWeekDate(weekStart) ?? "Next Monday";
   const formattedWeekEnd = formatWeekDate(weekEnd) ?? "That Sunday night";
   const timezoneLabel = band ?? "UTC+0";
-  const sharedStartNote = (
-    <>
-      <p className="cb-waiting-note-title">Why everyone starts together</p>
-      <p>We believe every circle should begin at the same moment.</p>
-      <p>
-        Starting together means every member feels included from the very first conversation.
-      </p>
-      <p>No catching up.</p>
-      <p>No joining halfway through.</p>
-      <p>Just six people beginning together.</p>
-    </>
-  );
 
   if (brand === "cardiobunny") {
     return (
@@ -72,6 +82,7 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
                 path.
               </p>
               <p className="cb-waiting-highlight">Everyone begins together.</p>
+
               <div className="cb-waiting-body">
                 <p>That means nobody joins halfway through.</p>
                 <p>Nobody feels like an outsider.</p>
@@ -81,18 +92,19 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
 
               <div className="cb-waiting-promise">
                 <p className="cb-waiting-promise-title">We&apos;ll hold your place.</p>
-                <p>When your circle opens we&apos;ll bring you straight back.</p>
+                <p>When your circle opens, we&apos;ll bring you straight back.</p>
               </div>
 
               <div className="cb-waiting-checklist">
-                <p>✓ Your place is reserved.</p>
-                <p>✓ Your answers have been saved.</p>
-                <p>✓ We&apos;ll let you know when it&apos;s time.</p>
+                <WaitingCheck>Your place is reserved.</WaitingCheck>
+                <WaitingCheck>Your answers have been saved.</WaitingCheck>
+                <WaitingCheck>We&apos;ll let you know when it&apos;s time.</WaitingCheck>
               </div>
             </section>
 
             <aside className="cb-waiting-card">
               <p className="cb-how-kicker">Your upcoming circle</p>
+
               <div className="cb-waiting-meta">
                 <div className="cb-waiting-meta-row">
                   <span>Circle opens</span>
@@ -109,12 +121,11 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
               </div>
 
               <div className="cb-waiting-note cb-waiting-note-desktop">
-                {sharedStartNote}
+                <SharedStartNote />
               </div>
 
               <div className="cb-waiting-actions">
                 <Link className="cb-submit button-reset cb-waiting-cta" href="/">
-                  <span aria-hidden="true">[]</span>
                   <span>Got it</span>
                 </Link>
                 <Link className="cb-waiting-secondary" href="/">
@@ -126,7 +137,7 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
 
           <section className="cb-waiting-mobile-followup">
             <div className="cb-waiting-note cb-waiting-note-mobile">
-              {sharedStartNote}
+              <SharedStartNote />
             </div>
           </section>
         </section>
@@ -141,9 +152,8 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
           <p className="eyebrow">Waiting Room</p>
           <h1>Your next circle starts on Monday.</h1>
           <p className="lede">
-            5others does not drop people into half-formed rooms midweek. The pause
-            is part of the design: one clean beginning, one shared rhythm, one
-            ending.
+            5others does not drop people into half-formed rooms midweek. The pause is part of the
+            design: one clean beginning, one shared rhythm, one ending.
           </p>
         </div>
 
