@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { triggerCircleReadyNotifications } from "@/app/admin/actions";
 import { requireAdminUserEmail } from "@/lib/auth";
 import { getAdminDashboardData } from "@/lib/admin-dashboard";
@@ -108,6 +110,28 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             Run circle-ready notifications
           </button>
         </form>
+      </section>
+
+      <section className="admin-card">
+        <div className="admin-card-head">
+          <div>
+            <p className="admin-section-label">Quick access</p>
+            <h2>Open circle views</h2>
+          </div>
+          <p className="admin-copy admin-copy-tight">
+            Jump straight into the reference room or the live member route without having to type
+            URLs by hand.
+          </p>
+        </div>
+
+        <div className="admin-link-row">
+          <Link className="admin-primary admin-link-button" href="/circle-demo">
+            View demo circle
+          </Link>
+          <Link className="admin-secondary admin-link-button" href="/my-circle">
+            Open live circle route
+          </Link>
+        </div>
       </section>
 
       <section className="admin-grid">

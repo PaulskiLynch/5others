@@ -2472,6 +2472,9 @@ h3 {
 }
 
 .admin-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 14px 18px;
   border-radius: 16px;
   background: linear-gradient(180deg, #efc55a 0%, #d8a83b 100%);
@@ -2479,6 +2482,32 @@ h3 {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 0.98rem;
   font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: #f7f1ea;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-link-button {
+  min-width: 190px;
 }
 
 .admin-grid {
