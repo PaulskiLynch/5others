@@ -16,7 +16,7 @@ export function CardioBunnySignInScreen({ next, signUpUrl }: CardioBunnySignInSc
   return (
     <CardioBunnyEntryShell
       cardSubtitle="Sign in first, then we&apos;ll ask a few quiet matching questions."
-      cardTitle="Enter this week&apos;s circle"
+      cardTitle="Enter this week&apos;s CardioBunny circles"
     >
       <div className="clerk-shell clerk-shell-cardiobunny">
         <SignIn forceRedirectUrl={next} path="/sign-in" routing="path" signUpUrl={signUpUrl} />

@@ -19,7 +19,7 @@ export function CardioBunnySignUpScreen({
   return (
     <CardioBunnyEntryShell
       cardSubtitle="Create your private access first, then we&apos;ll ask a few quiet matching questions."
-      cardTitle="Start this week&apos;s circle"
+      cardTitle="Enter this week&apos;s CardioBunny circles"
     >
       <div className="clerk-shell clerk-shell-cardiobunny">
         <SignUp
