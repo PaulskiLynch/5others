@@ -1,8 +1,6 @@
-import Image from "next/image";
-
 import { submitAuthenticatedIntake } from "@/app/onboarding/actions";
-import { JoinHiddenFields } from "@/app/join/JoinHiddenFields";
-import { ageRanges, fitnessGoals, preferredLanguages, startingPoints } from "@/lib/product";
+import { OnboardingHiddenFields } from "@/app/onboarding/OnboardingHiddenFields";
+import { ageRanges, preferredLanguages } from "@/lib/product";
 
 type CardioBunnyOnboardingScreenProps = {
   error?: string;
@@ -17,44 +15,36 @@ export function CardioBunnyOnboardingScreen({
     <main className="cb-onboarding-page">
       <section className="cb-onboarding-shell">
         <aside className="cb-onboarding-explainer">
-          <div className="cb-onboarding-lockup">
-            <Image
-              alt="Cardio Bunny Love Your Heart"
-              className="cb-onboarding-logo"
-              height={120}
-              priority
-              src="/cardiobunny-love-your-heart.png"
-              width={360}
-            />
-          </div>
-
-          <p className="cb-onboarding-kicker">How circles work</p>
-          <h1 className="cb-onboarding-title">A quiet matching step before this week&apos;s circle.</h1>
+          <p className="cb-onboarding-kicker">Private matching</p>
+          <h1 className="cb-onboarding-title">We&apos;ll help you find your five others.</h1>
           <div className="cb-onboarding-copy">
-            <p>Every week, we place CardioBunnies into small circles of six.</p>
             <p>
-              You answer a few quiet questions. We use them only to match you with five others on a
-              similar path.
+              You don&apos;t need to explain everything. Just share enough for us to place you with
+              people who understand what this week feels like.
             </p>
-            <p>No feeds. No public profiles. No pressure.</p>
           </div>
-          <p className="cb-onboarding-footnote">
-            Your real name is never shown inside the circle.
-          </p>
+          <div className="cb-onboarding-bullets">
+            <p>Your real name is never shown inside the circle.</p>
+            <p>Your circle is private.</p>
+            <p>We only use these answers to match you well.</p>
+            <p>Each week is a fresh start.</p>
+          </div>
+          <p className="cb-onboarding-footnote">No feeds. No followers. Just a small circle where you can be heard.</p>
         </aside>
 
         <section className="cb-onboarding-card">
           <div className="cb-form-head cb-onboarding-card-head">
-            <h2 className="cb-form-title">Help us place you well</h2>
+            <h2 className="cb-form-title">A few gentle questions to find your people</h2>
             <p className="cb-form-subtitle">
-              A few quiet details help us match you with the right CardioBunny circle.
+              We don&apos;t need much. Just enough to match you with others who get what you&apos;re
+              going through right now.
             </p>
           </div>
 
           {error ? <p className="error-banner cb-error-banner">{error}</p> : null}
 
           <form action={submitAuthenticatedIntake} className="cb-entry-form cb-onboarding-form">
-            <JoinHiddenFields />
+            <OnboardingHiddenFields />
             <input name="next" type="hidden" value={next} />
 
             <label className="cb-field">
@@ -69,7 +59,7 @@ export function CardioBunnyOnboardingScreen({
             </label>
 
             <label className="cb-field">
-              <span>Age group</span>
+              <span>Your age group</span>
               <select defaultValue="30-44" name="ageRange" required>
                 {ageRanges.map((ageRange) => (
                   <option key={ageRange} value={ageRange}>
@@ -80,61 +70,46 @@ export function CardioBunnyOnboardingScreen({
             </label>
 
             <label className="cb-field">
-              <span>Where are you on your heart-health or fitness path right now?</span>
-              <select defaultValue="restarting" name="startingPoint" required>
-                {startingPoints.map((startingPoint) => (
-                  <option key={startingPoint} value={startingPoint}>
-                    {startingPoint === "restarting"
-                      ? "Restarting after a break"
-                      : startingPoint === "building_consistency"
-                        ? "Building consistency"
-                        : "Already active, staying steady"}
-                  </option>
-                ))}
+              <span>What brings you here this week?</span>
+              <select defaultValue="just_getting_started" name="startingPoint" required>
+                <option value="just_getting_started">Just getting started</option>
+                <option value="getting_back_on_track">Getting back on track after a break</option>
+                <option value="staying_consistent">Staying consistent</option>
+                <option value="pushing_next_level">Pushing to the next level</option>
+                <option value="just_exploring">Not sure yet — just exploring</option>
               </select>
             </label>
 
             <label className="cb-field">
-              <span>What is your main focus right now? Optional.</span>
-              <select defaultValue="" name="fitnessGoal">
-                <option value="">Choose one if it helps us match you</option>
-                {fitnessGoals.map((fitnessGoal) => (
-                  <option key={fitnessGoal} value={fitnessGoal}>
-                    {fitnessGoal === "weight_loss"
-                      ? "Weight loss"
-                      : fitnessGoal === "endurance"
-                        ? "Endurance"
-                        : fitnessGoal === "general_health"
-                          ? "General health"
-                          : fitnessGoal === "heart_health"
-                            ? "Heart health"
-                            : "Consistency"}
-                  </option>
-                ))}
+              <span>What would feel most helpful right now?</span>
+              <select defaultValue="encouragement" name="supportStyle" required>
+                <option value="encouragement">A little encouragement</option>
+                <option value="gentle_accountability">Gentle accountability</option>
+                <option value="starting_over">A fresh start</option>
+                <option value="help_me_show_up">Motivation to keep going</option>
+                <option value="not_alone">Just knowing I&apos;m not alone</option>
               </select>
             </label>
 
             <label className="cb-field">
-              <span>What would feel most helpful from this circle this week?</span>
+              <span>Anything else you&apos;d like us to know?</span>
               <textarea
                 name="goal"
-                placeholder="A little encouragement, gentle accountability, a reset, or simply not doing this alone..."
-                required
+                placeholder="You can share as much or as little as you like..."
                 rows={4}
               />
             </label>
 
             <button className="cb-submit button-reset" type="submit">
               <span aria-hidden="true">[]</span>
-              <span>Place me in this week&apos;s circle</span>
+              <span>Find my circle</span>
             </button>
 
-            <p className="cb-form-note">We only ask for what helps us match you well.</p>
-
-            <p className="cb-form-trust">
-              Your information stays private and is only used to place you with five others on a
-              similar path.
+            <p className="cb-form-note">
+              We&apos;ll use your answers only to match you with five others on a similar path.
             </p>
+
+            <p className="cb-form-trust">Your real name is never shown inside the circle.</p>
           </form>
         </section>
       </section>

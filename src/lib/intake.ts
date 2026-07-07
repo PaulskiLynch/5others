@@ -61,7 +61,7 @@ export async function createPilotIntakeRequest(
   if (!parsed.success) {
     return {
       ok: false,
-      error: "Please complete every field with a valid email, timezone, and weekly goal.",
+      error: "Please complete the matching questions with a valid email and timezone.",
     };
   }
 
@@ -90,7 +90,7 @@ export async function createPilotIntakeRequest(
     starting_point: parsed.data.startingPoint,
     support_style: parsed.data.supportStyle,
     fitness_goal: parsed.data.fitnessGoal ?? null,
-    goal: parsed.data.goal,
+    goal: parsed.data.goal ?? "",
     timezone_band: timezoneBand,
     week_start: weekStart,
     week_end: weekEnd,

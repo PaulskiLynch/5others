@@ -37,6 +37,11 @@ export const startingPoints = [
   "restarting",
   "building_consistency",
   "already_active",
+  "just_getting_started",
+  "getting_back_on_track",
+  "staying_consistent",
+  "pushing_next_level",
+  "just_exploring",
 ] as const;
 export type StartingPoint = (typeof startingPoints)[number];
 
@@ -45,6 +50,7 @@ export const supportStyles = [
   "encouragement",
   "starting_over",
   "help_me_show_up",
+  "not_alone",
 ] as const;
 export type SupportStyle = (typeof supportStyles)[number];
 

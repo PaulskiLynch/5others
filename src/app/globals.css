@@ -1493,7 +1493,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px 24px;
+  padding: 22px 24px;
   background:
     radial-gradient(circle at top left, rgba(232, 177, 62, 0.12), transparent 24%),
     radial-gradient(circle at 85% 10%, rgba(255, 227, 160, 0.08), transparent 18%),
@@ -1504,25 +1504,14 @@ h3 {
 .cb-onboarding-shell {
   width: min(1180px, 100%);
   display: grid;
-  grid-template-columns: 360px minmax(0, 560px);
+  grid-template-columns: 360px minmax(0, 580px);
   justify-content: center;
-  gap: 40px;
+  gap: 48px;
   align-items: center;
 }
 
 .cb-onboarding-explainer {
-  padding: 14px 8px;
-}
-
-.cb-onboarding-lockup {
-  margin-bottom: 18px;
-}
-
-.cb-onboarding-logo {
-  width: min(100%, 220px);
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.32));
+  padding: 8px 6px;
 }
 
 .cb-onboarding-kicker {
@@ -1544,8 +1533,8 @@ h3 {
 
 .cb-onboarding-copy {
   display: grid;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .cb-onboarding-copy p {
@@ -1553,6 +1542,32 @@ h3 {
   color: rgba(255, 245, 235, 0.74);
   font-size: 0.98rem;
   line-height: 1.62;
+}
+
+.cb-onboarding-bullets {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.cb-onboarding-bullets p {
+  position: relative;
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(255, 245, 235, 0.74);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.cb-onboarding-bullets p::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #e4b246;
 }
 
 .cb-onboarding-footnote {
@@ -1565,8 +1580,8 @@ h3 {
 
 .cb-onboarding-card {
   width: 100%;
-  max-width: 560px;
-  padding: 28px 28px 24px;
+  max-width: 580px;
+  padding: 26px 26px 22px;
   border-radius: 30px;
   border: 1px solid rgba(255, 251, 245, 0.12);
   background:
@@ -1583,12 +1598,12 @@ h3 {
 }
 
 .cb-onboarding-form {
-  margin-top: 18px;
-  gap: 14px;
+  margin-top: 16px;
+  gap: 13px;
 }
 
 .cb-onboarding-form .cb-field textarea {
-  min-height: 96px;
+  min-height: 108px;
 }
 
 .cb-how-it-works {

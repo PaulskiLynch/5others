@@ -393,7 +393,10 @@ async function ensureCircleForUser(user: AppUserRow) {
   }
 
   const category = intake?.category ?? "fitness";
-  const freeText = intake?.goal ?? "I want a small, steady week instead of an all-or-nothing one.";
+  const freeText =
+    intake?.goal && intake.goal.trim().length > 0
+      ? intake.goal
+      : "I want a small, steady week instead of an all-or-nothing one.";
   const language = user.locale.startsWith("pl") ? "pl" : "en";
 
   if (!existingIntent) {

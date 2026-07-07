@@ -24,7 +24,12 @@ export const intakeRequestSchema = z.object({
     .union([z.enum(fitnessGoals), z.literal("")])
     .transform((value) => (value === "" ? undefined : value))
     .optional(),
-  goal: z.string().trim().min(12).max(240),
+  goal: z
+    .string()
+    .trim()
+    .max(240)
+    .transform((value) => (value === "" ? undefined : value))
+    .optional(),
   acceptsSafety: z.literal(true),
   acceptsNoDmRule: z.literal(true),
 });
