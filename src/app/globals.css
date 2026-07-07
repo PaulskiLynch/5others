@@ -1611,6 +1611,10 @@ h3 {
   justify-items: end;
 }
 
+.circle-demo-message-row-own .circle-support-row {
+  justify-content: flex-end;
+}
+
 .circle-demo-name {
   margin: 0;
   color: rgba(255, 242, 230, 0.82);
@@ -3781,6 +3785,7 @@ h3 {
   }
 
   .circle-demo-message-row-own .circle-demo-message-stack {
+    width: 84%;
     max-width: 84%;
   }
 
@@ -3788,6 +3793,10 @@ h3 {
     max-width: 100%;
     padding: 14px 16px;
     border-radius: 22px;
+  }
+
+  .circle-demo-message-row-own .circle-demo-bubble {
+    margin-left: auto;
   }
 
   .circle-demo-bubble-copy {
