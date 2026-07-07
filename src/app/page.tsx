@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 import { getAuthenticatedUserEmail } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
-import { hasPilotIntakeRequest } from "@/lib/intake";
+import { getMemberEntryState } from "@/lib/intake";
 import { withNext } from "@/lib/navigation";
 
 import {
@@ -20,8 +20,21 @@ export default async function Home() {
   const authenticatedEmail = await getAuthenticatedUserEmail();
 
   if (authenticatedEmail) {
-    const hasIntake = await hasPilotIntakeRequest(authenticatedEmail);
-    redirect(hasIntake ? "/my-circle" : "/onboarding");
+    const entryState = await getMemberEntryState(authenticatedEmail);
+
+    if (!entryState.hasIntake) {
+      redirect("/onboarding");
+    }
+
+    if (entryState.shouldWait) {
+      redirect(
+        `/waiting?weekStart=${encodeURIComponent(entryState.weekStart ?? "")}&weekEnd=${encodeURIComponent(
+          entryState.weekEnd ?? ""
+        )}&mode=supabase&band=${encodeURIComponent(entryState.timeZoneBand ?? "UTC+0")}`
+      );
+    }
+
+    redirect("/my-circle");
   }
 
   if (brand === "cardiobunny") {

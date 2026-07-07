@@ -1,6 +1,6 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { intakeRequestSchema } from "@/lib/validation";
-import { getTimezoneBandLabel, getUpcomingWeekWindow } from "@/lib/week";
+import { getTimezoneBandLabel, getUpcomingWeekWindow, hasWeekStarted } from "@/lib/week";
 
 export type IntakeResult =
   | {
@@ -51,6 +51,34 @@ export async function getLatestPilotIntakeRequest(email: string) {
 export async function hasPilotIntakeRequest(email: string) {
   const intake = await getLatestPilotIntakeRequest(email);
   return Boolean(intake);
+}
+
+export async function getMemberEntryState(email: string) {
+  const intake = await getLatestPilotIntakeRequest(email);
+
+  if (!intake) {
+    return {
+      hasIntake: false,
+      shouldWait: false,
+    } as const;
+  }
+
+  const timeZone = typeof intake.timezone === "string" && intake.timezone ? intake.timezone : "UTC";
+  const shouldWait =
+    typeof intake.week_start === "string" && intake.week_start.length > 0
+      ? !hasWeekStarted(intake.week_start, timeZone)
+      : false;
+
+  return {
+    hasIntake: true,
+    shouldWait,
+    timeZoneBand:
+      typeof intake.timezone_band === "string" && intake.timezone_band
+        ? intake.timezone_band
+        : getTimezoneBandLabel(timeZone),
+    weekEnd: typeof intake.week_end === "string" ? intake.week_end : null,
+    weekStart: typeof intake.week_start === "string" ? intake.week_start : null,
+  } as const;
 }
 
 export async function createPilotIntakeRequest(

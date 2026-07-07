@@ -32,6 +32,10 @@ function getIsoDateInTimeZone(date: Date, timeZone: string) {
   return `${year}-${month}-${day}`;
 }
 
+export function hasWeekStarted(weekStart: string, timeZone: string, from = new Date()) {
+  return getIsoDateInTimeZone(from, timeZone) >= weekStart;
+}
+
 export function getUpcomingWeekWindow(timeZone: string, from = new Date()) {
   const weekday = getWeekdayIndexInTimeZone(from, timeZone);
   const daysUntilNextMonday = weekday === 1 ? 7 : (8 - weekday) % 7;

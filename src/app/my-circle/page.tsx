@@ -5,7 +5,7 @@ import { requireAuthenticatedUserEmail } from "@/lib/auth";
 import { SignOutAction } from "@/components/auth/SignOutAction";
 import { CircleBottomNav } from "@/components/circle/CircleBottomNav";
 import { getMyCircleView } from "@/lib/circle";
-import { hasPilotIntakeRequest } from "@/lib/intake";
+import { getMemberEntryState } from "@/lib/intake";
 import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
 import { redirect } from "next/navigation";
 
@@ -19,11 +19,19 @@ type MyCirclePageProps = {
 
 export default async function MyCirclePage({ searchParams }: MyCirclePageProps) {
   const email = await requireAuthenticatedUserEmail();
-  const hasIntake = await hasPilotIntakeRequest(email);
+  const entryState = await getMemberEntryState(email);
   const { error } = await searchParams;
 
-  if (!hasIntake) {
+  if (!entryState.hasIntake) {
     redirect("/onboarding?next=/my-circle");
+  }
+
+  if (entryState.shouldWait) {
+    redirect(
+      `/waiting?weekStart=${encodeURIComponent(entryState.weekStart ?? "")}&weekEnd=${encodeURIComponent(
+        entryState.weekEnd ?? ""
+      )}&mode=supabase&band=${encodeURIComponent(entryState.timeZoneBand ?? "UTC+0")}`
+    );
   }
 
   const circle = await getMyCircleView(email);
