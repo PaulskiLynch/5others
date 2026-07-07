@@ -22,6 +22,10 @@ type DemoMessage = {
   avatarSrc: string;
   body: string;
   own: boolean;
+  replyTo?: {
+    author: string;
+    body: string;
+  };
   supports: SupportCounts;
   time: string;
 };
@@ -84,12 +88,12 @@ const initialMessages: DemoMessage[] = [
 ];
 
 const memberStatuses = [
-  { active: true, mentionAlias: "SilverBunny", src: "/demo-bunnies/bunny-1.png" },
-  { active: true, mentionAlias: "GentleBunny", src: "/demo-bunnies/bunny-3.png" },
-  { active: true, mentionAlias: "BraveBunny", src: "/demo-bunnies/bunny-6.png" },
-  { active: true, mentionAlias: "OpenBunny", src: "/demo-bunnies/bunny-5.png" },
-  { active: false, mentionAlias: "CalmBunny", src: "/demo-bunnies/bunny-4.png" },
-  { active: true, mentionAlias: "You", src: "/demo-bunnies/bunny-2.png" },
+  { author: "Silver Cottontail", mentionAlias: "SilverBunny", src: "/demo-bunnies/bunny-1.png" },
+  { author: "Gentle Cottontail", mentionAlias: "GentleBunny", src: "/demo-bunnies/bunny-3.png" },
+  { author: "Brave Cottontail", mentionAlias: "BraveBunny", src: "/demo-bunnies/bunny-6.png" },
+  { author: "Open Cottontail", mentionAlias: "OpenBunny", src: "/demo-bunnies/bunny-5.png" },
+  { author: "Calm Cottontail", mentionAlias: "CalmBunny", src: "/demo-bunnies/bunny-4.png" },
+  { author: "You", mentionAlias: "You", src: "/demo-bunnies/bunny-2.png" },
 ] as const;
 
 const mentionDirectory = new Map([
@@ -198,6 +202,7 @@ export function CircleDemoClient() {
   const [reacted, setReacted] = useState<Record<string, SupportState>>(
     () => getInitialDemoState().reacted
   );
+  const [replyToIndex, setReplyToIndex] = useState<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -234,6 +239,8 @@ export function CircleDemoClient() {
       return;
     }
 
+    const replyTarget = replyToIndex !== null ? messages[replyToIndex] : null;
+
     setMessages((current) => [
       ...current,
       {
@@ -242,11 +249,18 @@ export function CircleDemoClient() {
         accentColor: "#e0c070",
         body: trimmed,
         own: true,
+        replyTo: replyTarget
+          ? {
+              author: replyTarget.author,
+              body: replyTarget.body,
+            }
+          : undefined,
         supports: { heart: 0, hug: 0, support: 0 },
         time: getTimeLabel(),
       },
     ]);
     setDraft("");
+    setReplyToIndex(null);
   }
 
   function handleSupport(messageIndex: number, kind: keyof SupportCounts) {
@@ -278,6 +292,22 @@ export function CircleDemoClient() {
     }));
   }
 
+  function handleReply(messageIndex: number) {
+    setReplyToIndex(messageIndex);
+    textareaRef.current?.focus();
+  }
+
+  function handleResetDemo() {
+    setMessages(initialMessages);
+    setReacted({});
+    setDraft("");
+    setReplyToIndex(null);
+    window.localStorage.removeItem(DEMO_STORAGE_KEY);
+  }
+
+  const seenTodayAuthors = new Set(messages.map((message) => message.author));
+  const replyTarget = replyToIndex !== null ? messages[replyToIndex] : null;
+
   return (
     <main className="cb-entry-page">
       <section className="circle-demo-shell">
@@ -298,11 +328,17 @@ export function CircleDemoClient() {
             </Link>
           </header>
 
+          <div className="circle-demo-utility">
+            <button className="circle-demo-reset button-reset" onClick={handleResetDemo} type="button">
+              Reset demo
+            </button>
+          </div>
+
           <div className="circle-demo-members" aria-label="Circle members">
             {memberStatuses.map((member) => (
               <span
-                className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
-                key={`${member.src}-${member.active ? "on" : "off"}`}
+                className={`circle-demo-member ${seenTodayAuthors.has(member.author) ? "circle-demo-member-active" : ""}`}
+                key={member.author}
               >
                 <Image alt="" className="circle-demo-member-image" height={28} src={member.src} width={28} />
               </span>
@@ -333,12 +369,25 @@ export function CircleDemoClient() {
                     className={`circle-demo-bubble ${message.own ? "circle-demo-bubble-own" : ""}`}
                     style={bubbleStyle(message.accentColor, message.own)}
                   >
+                    {message.replyTo ? (
+                      <div className="circle-demo-reply-preview">
+                        <p className="circle-demo-reply-author">{message.replyTo.author}</p>
+                        <p className="circle-demo-reply-copy">{message.replyTo.body}</p>
+                      </div>
+                    ) : null}
                     <p className="circle-demo-bubble-copy">{renderMessageWithMentions(message.body)}</p>
                   </div>
 
                   <p className="circle-demo-time">{message.time}</p>
 
                   <div className="circle-support-row">
+                    <button
+                      className="circle-support-pill button-reset"
+                      onClick={() => handleReply(index)}
+                      type="button"
+                    >
+                      <span className="circle-support-pill-label">Reply</span>
+                    </button>
                     {(["heart", "hug", "support"] as const).map((kind) => (
                       <button
                         className={`circle-support-pill button-reset ${
@@ -362,6 +411,22 @@ export function CircleDemoClient() {
 
           <section className="circle-demo-composer">
             <p className="circle-demo-prompt">What&apos;s the smallest promise you can honestly keep today?</p>
+
+            {replyTarget ? (
+              <div className="circle-demo-replying">
+                <div>
+                  <p className="circle-demo-replying-label">Replying to {replyTarget.author}</p>
+                  <p className="circle-demo-replying-copy">{replyTarget.body}</p>
+                </div>
+                <button
+                  className="circle-demo-reset button-reset"
+                  onClick={() => setReplyToIndex(null)}
+                  type="button"
+                >
+                  Clear
+                </button>
+              </div>
+            ) : null}
 
             <div className="circle-mention-strip" aria-label="Mention a circle member">
               {memberStatuses
