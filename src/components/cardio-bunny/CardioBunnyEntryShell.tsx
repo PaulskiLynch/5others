@@ -11,7 +11,7 @@ const supportNotes = [
   {
     icon: "OO",
     title: "Five others, just like you",
-    body: "We match you with five others on a similar path.",
+    body: "We quietly match you with five others on a similar path.",
   },
   {
     icon: "[]",
@@ -27,24 +27,16 @@ const supportNotes = [
 
 const modelNotes = [
   {
-    title: "Every circle has 6 people",
-    body: "The CardioBunny experience is designed around one small, matched circle of six people."
+    title: "Never a crowd",
+    body: "No feeds. No followers. No pressure to perform. Just six people in a private circle where everyone has room to be heard."
   },
   {
-    title: "6 users = 1 complete circle",
-    body: "The product does not need a huge crowd to become useful. One complete circle is enough to deliver the full experience."
+    title: "A fresh start every week",
+    body: "This is not a lifelong commitment. Each week is a simple chance to check in, reset, and find support for what you are carrying right now."
   },
   {
-    title: "60 users = 10 circles",
-    body: "As more members join, we do not create a noisy feed. We simply create more carefully matched circles."
-  },
-  {
-    title: "600 users = 100 circles",
-    body: "Scale does not change the feel of the product. It only means more small rooms, each with the same calm structure."
-  },
-  {
-    title: "Growth stays personal",
-    body: "More members simply means more small, carefully matched circles rather than one giant community competing for attention."
+    title: "More members means more circles",
+    body: "We do not build bigger rooms. We build more small ones. Your circle always stays personal: five others, one shared path, one week of real support."
   },
 ] as const;
 
@@ -77,7 +69,7 @@ export function CardioBunnyEntryShell({
               Join this week&apos;s CardioBunny circles for real, heart-centered support.
             </p>
             <p className="cb-hero-urgency">This week&apos;s circles close Sunday night.</p>
-            <p className="cb-hero-highlight">We match you with five others on a similar path.</p>
+            <p className="cb-hero-highlight">We quietly match you with five others on a similar path.</p>
 
             <div className="cb-feature-list">
               {supportNotes.map((item) => (
@@ -109,11 +101,11 @@ export function CardioBunnyEntryShell({
         <div className="cb-model-shell">
           <div className="cb-model-header">
             <p className="cb-kicker">Why circles work</p>
-            <h2 className="cb-model-title">CardioBunny works from the very first complete circle.</h2>
+            <h2 className="cb-model-title">Your circle stays small, no matter how many people join.</h2>
             <p className="cb-model-copy">
-              Most communities need scale before they become useful. CardioBunny works from the
-              first complete circle. Whether there are 6 members or 1 million, your experience
-              stays personal: five others, one shared path, one week of real support.
+              Most communities get louder as they grow. CardioBunny doesn&apos;t. Every week, we
+              quietly place you with five others on a similar path, so you can be seen instead of
+              lost in a crowd.
             </p>
           </div>
 
@@ -132,22 +124,18 @@ export function CardioBunnyEntryShell({
               <p className="cb-quote-copy">
                 This circle changed everything. I finally felt seen, supported, and not so alone.
               </p>
-              <footer className="cb-quote-credit">Cardio Bunny circle member</footer>
+              <footer className="cb-quote-credit">CardioBunny member</footer>
             </blockquote>
 
             <div className="cb-trust-panel">
-              <p className="cb-trust-title">Private, weekly, and powered by small matched circles</p>
+              <p className="cb-trust-title">Private. Weekly. Built around you.</p>
               <p className="cb-privacy-note">
-                Real names are never shown inside the circle. We ask a few quiet matching
-                questions, place you into a weekly cohort, and keep the experience calm instead of noisy.
+                We never show real names inside the circle. We ask a few quiet questions, match
+                you carefully, and then keep the experience calm so real support can happen naturally.
               </p>
-              <div className="cb-entry-footer">
-                <div aria-hidden="true" className="cb-entry-footer-icon">
-                  OO
-                </div>
-                <p>6 people. 1 circle. Real support.</p>
-                <span>More members simply means more carefully matched CardioBunny circles.</span>
-              </div>
+              <p className="cb-trust-closing">
+                The goal is not to build a crowd. It is to make sure you never have to walk alone.
+              </p>
             </div>
           </div>
         </div>
