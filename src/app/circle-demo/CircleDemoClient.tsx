@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 type DemoMessage = {
   accentColor: string;
   author: string;
+  avatarSrc: string;
   body: string;
   own: boolean;
   time: string;
@@ -14,6 +16,7 @@ type DemoMessage = {
 const initialMessages: DemoMessage[] = [
   {
     author: "Silver Cottontail",
+    avatarSrc: "/demo-bunnies/bunny-1.png",
     accentColor: "#e7d6b5",
     time: "9:15 AM",
     body: "I restarted my morning walk today. Only twelve minutes, but it counted.",
@@ -21,6 +24,7 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Gentle Cottontail",
+    avatarSrc: "/demo-bunnies/bunny-3.png",
     accentColor: "#f1d9d8",
     time: "9:17 AM",
     body: "That absolutely counts. I am beginning again too.",
@@ -28,6 +32,7 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Brave Cottontail",
+    avatarSrc: "/demo-bunnies/bunny-6.png",
     accentColor: "#f2e3c9",
     time: "9:19 AM",
     body: "Water first, shoes on second. What is the smallest version of the walk you can do today?",
@@ -35,6 +40,7 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Open Cottontail",
+    avatarSrc: "/demo-bunnies/bunny-5.png",
     accentColor: "#d4e3d5",
     time: "9:22 AM",
     body: "Mine is just to get outside before lunch. I keep overthinking it when I stay indoors.",
@@ -42,6 +48,7 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "You",
+    avatarSrc: "/demo-bunnies/bunny-2.png",
     accentColor: "#e0c070",
     time: "9:24 AM",
     body: "Mine is simply shoes on. No promises beyond that.",
@@ -49,6 +56,7 @@ const initialMessages: DemoMessage[] = [
   },
   {
     author: "Calm Cottontail",
+    avatarSrc: "/demo-bunnies/bunny-4.png",
     accentColor: "#efe0d0",
     time: "9:26 AM",
     body: "Same. If I make it tiny enough, I usually do it. Five minutes still changes the day.",
@@ -57,12 +65,12 @@ const initialMessages: DemoMessage[] = [
 ];
 
 const memberStatuses = [
-  { active: true, tone: "#e7d6b5" },
-  { active: true, tone: "#f1d9d8" },
-  { active: true, tone: "#f2e3c9" },
-  { active: true, tone: "#d4e3d5" },
-  { active: false, tone: "#d9d1ca" },
-  { active: true, tone: "#e0c070" },
+  { active: true, src: "/demo-bunnies/bunny-1.png" },
+  { active: true, src: "/demo-bunnies/bunny-3.png" },
+  { active: true, src: "/demo-bunnies/bunny-6.png" },
+  { active: true, src: "/demo-bunnies/bunny-5.png" },
+  { active: false, src: "/demo-bunnies/bunny-4.png" },
+  { active: true, src: "/demo-bunnies/bunny-2.png" },
 ] as const;
 
 function hexToRgb(hex: string) {
@@ -73,15 +81,6 @@ function hexToRgb(hex: string) {
     r: (value >> 16) & 255,
     g: (value >> 8) & 255,
     b: value & 255,
-  };
-}
-
-function avatarStyle(accentColor: string) {
-  const { r, g, b } = hexToRgb(accentColor);
-
-  return {
-    background: `rgb(${r} ${g} ${b})`,
-    color: `rgb(${Math.max(38, r - 110)} ${Math.max(28, g - 110)} ${Math.max(24, b - 110)})`,
   };
 }
 
@@ -122,6 +121,7 @@ export function CircleDemoClient() {
       ...current,
       {
         author: "You",
+        avatarSrc: "/demo-bunnies/bunny-2.png",
         accentColor: "#e0c070",
         body: trimmed,
         own: true,
@@ -155,11 +155,9 @@ export function CircleDemoClient() {
               {memberStatuses.map((member) => (
                 <span
                   className={`circle-demo-member ${member.active ? "circle-demo-member-active" : ""}`}
-                  key={`${member.tone}-${member.active ? "on" : "off"}`}
-                  style={{ backgroundColor: member.tone }}
+                  key={`${member.src}-${member.active ? "on" : "off"}`}
                 >
-                  <span className="circle-demo-bunny-ears" />
-                  <span className="circle-demo-bunny-face" />
+                  <Image alt="" className="circle-demo-member-image" height={28} src={member.src} width={28} />
                 </span>
               ))}
             </div>
@@ -179,10 +177,8 @@ export function CircleDemoClient() {
                   <span
                     aria-hidden="true"
                     className="circle-demo-avatar"
-                    style={avatarStyle(message.accentColor)}
                   >
-                    <span className="circle-demo-bunny-ears" />
-                    <span className="circle-demo-bunny-face" />
+                    <Image alt="" className="circle-demo-avatar-image" height={28} src={message.avatarSrc} width={28} />
                   </span>
                 ) : null}
 
