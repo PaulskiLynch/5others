@@ -1,11 +1,10 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { isLocalDevAuthEnabled } from "@/lib/auth";
-import { requireAuthenticatedUserEmail } from "@/lib/auth";
+import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
+import { isLocalDevAuthEnabled, requireAuthenticatedUserEmail } from "@/lib/auth";
 import { getMyCircleView } from "@/lib/circle";
 import { getMemberEntryState } from "@/lib/intake";
-import { stopDeveloperSession } from "@/app/dev-sign-in/actions";
-import { redirect } from "next/navigation";
 
 import { sendCircleMessage } from "./actions";
 
@@ -40,11 +39,18 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
       <section className="circle-focus-shell">
         <div className="circle-room-shell">
           <header className="circle-room-header">
-            <div className="circle-room-context">
-              <p className="circle-room-kicker">Your Circle</p>
-              <h1 className="circle-room-title">{circle.weekRangeLabel}</h1>
-              <p className="circle-room-subtitle">{circle.checkedInTodayCount} of 6 have shared today</p>
+            <Link className="circle-header-link" href="/">
+              ← Back
+            </Link>
+
+            <div className="circle-room-context circle-room-context-compact">
+              <h1 className="circle-room-title">Your Circle</h1>
+              <div className="circle-room-meta">
+                <span>Day {circle.dayNumber} of 7</span>
+                <span>{circle.checkedInTodayCount}/6 checked in today</span>
+              </div>
             </div>
+
             <div className="circle-room-settings">
               {showDevSignOut ? (
                 <form action={stopDeveloperSession}>
@@ -54,69 +60,76 @@ export default async function MyCirclePage({ searchParams }: MyCirclePageProps) 
                 </form>
               ) : (
                 <Link className="circle-settings-link" href="/settings">
-                  settings
+                  ⚙ Settings
                 </Link>
               )}
             </div>
           </header>
 
           <section className="circle-room-panel">
-            <div className="circle-member-list">
+            <div className="circle-member-strip" aria-label="Circle members">
               {circle.memberships.map((member) => (
-                <div className="circle-member-row" key={member.id}>
-                  <div className="circle-member-namewrap">
-                    <span className="circle-member-bunny" aria-hidden="true">
-                      {member.isYou ? "Y" : member.pseudonym.slice(0, 1)}
-                    </span>
-                    <span className="circle-member-name">{member.isYou ? "You" : member.pseudonym}</span>
-                  </div>
-                  <span className={`circle-member-status ${member.hasPostedToday ? "circle-member-status-posted" : "circle-member-status-quiet"}`}>
-                    {member.hasPostedToday ? "shared" : "quiet today"}
+                <div className="circle-member-pill" key={member.id} title={member.isYou ? "You" : member.pseudonym}>
+                  <span
+                    className={`circle-member-avatar ${
+                      member.isYou
+                        ? "circle-member-avatar-self"
+                        : member.hasPostedToday
+                          ? "circle-member-avatar-posted"
+                          : "circle-member-avatar-quiet"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {member.isYou ? "Y" : member.pseudonym.slice(0, 1)}
                   </span>
+                  <span className="circle-member-pill-label">{member.isYou ? "You" : member.pseudonym.slice(0, 1)}</span>
                 </div>
               ))}
             </div>
-
-            <section className="circle-composer-card">
-              {error ? <p className="error-banner">{error}</p> : null}
-
-              <form action={sendCircleMessage} className="composer-form circle-composer-form">
-                <div className="circle-composer-head">
-                  <h2>{circle.prompt}</h2>
-                </div>
-                <textarea
-                  className="composer-textarea circle-journal-textarea"
-                  name="body"
-                  placeholder="Share something small..."
-                  rows={4}
-                  required
-                />
-                <button className="cb-submit button-reset circle-share-button" type="submit">
-                  <span>Send</span>
-                </button>
-              </form>
-            </section>
 
             <div className="circle-feed">
               {circle.messages.map((message) => (
                 <article
-                  className="circle-note"
+                  className={`circle-chat-row ${message.isOwn ? "circle-chat-row-own" : "circle-chat-row-peer"} ${
+                    message.groupedWithPrevious ? "circle-chat-row-grouped" : ""
+                  }`}
                   key={message.id}
                 >
-                  <div className="circle-note-head">
-                    <p className="circle-note-author">
-                      {message.authorName} <span className="circle-note-separator">·</span> {message.relativeTime}
-                    </p>
+                  {!message.isOwn ? (
+                    <span className="circle-chat-avatar" aria-hidden="true">
+                      {message.authorName.slice(0, 1)}
+                    </span>
+                  ) : null}
+                  <div className={`circle-note ${message.isOwn ? "circle-note-own" : "circle-note-peer"}`}>
+                    <p className="circle-note-author">{message.authorName}</p>
+                    <p className="circle-note-body">{message.body}</p>
+                    <p className="circle-note-time">{message.relativeTime}</p>
                   </div>
-                  <p className="circle-note-body">{message.body}</p>
                 </article>
               ))}
             </div>
 
-            <footer className="circle-status-strip">
-              <span>{circle.checkedInTodayCount} of 6 have shared today</span>
-              <span>Circle closes Sunday night</span>
-            </footer>
+            <section className="circle-composer-card circle-composer-sticky">
+              {error ? <p className="error-banner">{error}</p> : null}
+
+              <div className="circle-composer-head">
+                <p className="circle-composer-kicker">Today&apos;s check-in</p>
+                <h2>{circle.prompt}</h2>
+              </div>
+
+              <form action={sendCircleMessage} className="composer-form circle-composer-form circle-composer-form-inline">
+                <textarea
+                  className="composer-textarea circle-journal-textarea"
+                  name="body"
+                  placeholder="Share something small..."
+                  rows={2}
+                  required
+                />
+                <button className="cb-submit button-reset circle-share-button circle-share-button-inline" type="submit">
+                  <span>Send</span>
+                </button>
+              </form>
+            </section>
           </section>
         </div>
       </section>
