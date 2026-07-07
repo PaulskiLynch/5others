@@ -35,6 +35,18 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
   const formattedWeekStart = formatWeekDate(weekStart) ?? "Next Monday";
   const formattedWeekEnd = formatWeekDate(weekEnd) ?? "That Sunday night";
   const timezoneLabel = band ?? "UTC+0";
+  const sharedStartNote = (
+    <>
+      <p className="cb-waiting-note-title">Why everyone starts together</p>
+      <p>We believe every circle should begin at the same moment.</p>
+      <p>
+        Starting together means every member feels included from the very first conversation.
+      </p>
+      <p>No catching up.</p>
+      <p>No joining halfway through.</p>
+      <p>Just six people beginning together.</p>
+    </>
+  );
 
   if (brand === "cardiobunny") {
     return (
@@ -59,9 +71,7 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
                 We&apos;re carefully matching you with five other people who are walking a similar
                 path.
               </p>
-              <p className="cb-waiting-highlight">
-                Everyone begins together.
-              </p>
+              <p className="cb-waiting-highlight">Everyone begins together.</p>
               <div className="cb-waiting-body">
                 <p>That means nobody joins halfway through.</p>
                 <p>Nobody feels like an outsider.</p>
@@ -98,18 +108,8 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
                 </div>
               </div>
 
-              <div className="cb-waiting-note">
-                <p className="cb-waiting-note-title">Why everyone starts together</p>
-                <p>
-                  We believe every circle should begin at the same moment.
-                </p>
-                <p>
-                  Starting together means every member feels included from the very first
-                  conversation.
-                </p>
-                <p>No catching up.</p>
-                <p>No joining halfway through.</p>
-                <p>Just six people beginning together.</p>
+              <div className="cb-waiting-note cb-waiting-note-desktop">
+                {sharedStartNote}
               </div>
 
               <div className="cb-waiting-actions">
@@ -123,6 +123,12 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
               </div>
             </aside>
           </div>
+
+          <section className="cb-waiting-mobile-followup">
+            <div className="cb-waiting-note cb-waiting-note-mobile">
+              {sharedStartNote}
+            </div>
+          </section>
         </section>
       </main>
     );

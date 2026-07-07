@@ -2285,6 +2285,14 @@ h3 {
   margin-top: 0;
 }
 
+.cb-waiting-note-mobile {
+  display: none;
+}
+
+.cb-waiting-mobile-followup {
+  display: none;
+}
+
 .cb-waiting-actions {
   display: grid;
   gap: 12px;
@@ -2623,6 +2631,10 @@ h3 {
     padding-bottom: 28px;
   }
 
+  .cb-waiting-page {
+    align-items: start;
+  }
+
   .cb-onboarding-page {
     padding: 20px 14px 28px;
     align-items: start;
@@ -2665,8 +2677,70 @@ h3 {
     padding: 0;
   }
 
+  .cb-waiting-shell {
+    gap: 18px;
+  }
+
+  .cb-waiting-story {
+    display: grid;
+    gap: 12px;
+  }
+
+  .cb-waiting-lockup {
+    margin-bottom: 4px;
+  }
+
+  .cb-waiting-image {
+    width: min(100%, 176px);
+  }
+
+  .cb-waiting-title {
+    max-width: 8ch;
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .cb-waiting-copy,
+  .cb-waiting-body p {
+    max-width: none;
+    font-size: 0.98rem;
+    line-height: 1.52;
+  }
+
+  .cb-waiting-highlight {
+    margin-top: 8px;
+  }
+
+  .cb-waiting-body {
+    gap: 6px;
+    margin-top: 0;
+  }
+
+  .cb-waiting-promise {
+    margin-top: 4px;
+    padding: 15px 16px;
+  }
+
+  .cb-waiting-checklist {
+    gap: 8px;
+    margin-top: 4px;
+  }
+
   .cb-waiting-card {
-    padding: 22px 18px 20px;
+    order: 2;
+    padding: 20px 18px 18px;
+  }
+
+  .cb-waiting-note-desktop {
+    display: none;
+  }
+
+  .cb-waiting-mobile-followup {
+    display: block;
+  }
+
+  .cb-waiting-note-mobile {
+    display: block;
+    margin-top: 0;
   }
 
   .cb-form-card {
