@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CardioBunnySignInScreen } from "@/components/cardio-bunny/CardioBunnySignInScreen";
 import { getAuthenticatedUserEmail } from "@/lib/auth";
 import { getRequestBrandKey } from "@/lib/brand";
 import { hasPilotIntakeRequest } from "@/lib/intake";
@@ -25,7 +24,7 @@ export default async function Home() {
   }
 
   if (brand === "cardiobunny") {
-    return <CardioBunnySignInScreen next={withNext("/continue", "/my-circle")} />;
+    redirect(withNext("/sign-in", "/my-circle"));
   }
 
   return (
