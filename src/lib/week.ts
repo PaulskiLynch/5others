@@ -17,7 +17,11 @@ function getWeekdayIndexInTimeZone(date: Date, timeZone: string) {
   return map[weekday];
 }
 
-function getIsoDateInTimeZone(date: Date, timeZone: string) {
+export function getWeekdayIndexForTimeZone(date: Date, timeZone: string) {
+  return getWeekdayIndexInTimeZone(date, timeZone);
+}
+
+export function getIsoDateInTimeZone(date: Date, timeZone: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",
@@ -34,6 +38,14 @@ function getIsoDateInTimeZone(date: Date, timeZone: string) {
 
 export function hasWeekStarted(weekStart: string, timeZone: string, from = new Date()) {
   return getIsoDateInTimeZone(from, timeZone) >= weekStart;
+}
+
+export function getDayNumberInWeek(weekStart: string, timeZone: string, from = new Date()) {
+  const today = new Date(`${getIsoDateInTimeZone(from, timeZone)}T12:00:00Z`);
+  const start = new Date(`${weekStart}T12:00:00Z`);
+  const diffMs = today.getTime() - start.getTime();
+  const diffDays = Math.floor(diffMs / 86_400_000);
+  return Math.min(7, Math.max(1, diffDays + 1));
 }
 
 export function getUpcomingWeekWindow(timeZone: string, from = new Date()) {

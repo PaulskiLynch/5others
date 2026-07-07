@@ -3,7 +3,13 @@ import { revalidatePath } from "next/cache";
 import { getDeveloperEmailOverride } from "@/lib/auth";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { generateWeeklyPseudonym } from "@/lib/pseudonyms";
-import { getTimezoneBandLabel, getUpcomingWeekWindow } from "@/lib/week";
+import {
+  getDayNumberInWeek,
+  getIsoDateInTimeZone,
+  getTimezoneBandLabel,
+  getUpcomingWeekWindow,
+  getWeekdayIndexForTimeZone,
+} from "@/lib/week";
 
 type AppUserRow = {
   id: string;
@@ -32,17 +38,30 @@ type MessageRow = {
 
 export type CircleViewModel = {
   category: string;
+  checkedInTodayCount: number;
+  dayLabel: string;
+  dayNumber: number;
+  hasPostedToday: boolean;
   memberCount: number;
-  memberships: MembershipRow[];
+  memberships: Array<
+    MembershipRow & {
+      hasPostedToday: boolean;
+      isYou: boolean;
+    }
+  >;
   messages: Array<
     MessageRow & {
       authorName: string;
       accentColor: string;
+      groupedWithPrevious: boolean;
       isOwn: boolean;
       tone: "blush" | "porcelain";
+      relativeTime: string;
     }
   >;
   prompt: string;
+  promptTitle: string;
+  weekRangeLabel: string;
   userMembership: MembershipRow;
 };
 
@@ -62,6 +81,26 @@ const seededMessages = [
 const dailyPrompt =
   "What is the smallest version of your promise to yourself that still feels honest today?";
 
+const weekdayPrompts = [
+  "Last day together. Say what mattered before the circle closes tonight.",
+  "Welcome in. Everyone is beginning together.",
+  "Small steps count today.",
+  "Halfway through. How are you really doing?",
+  "Someone in your circle may need encouragement today.",
+  "Celebrate even the tiny wins.",
+  "Take a quiet moment to reflect.",
+] as const;
+
+const weekdayPromptTitles = [
+  "Today's reflection",
+  "Today's reflection",
+  "Today's reflection",
+  "Today's reflection",
+  "Today's reflection",
+  "Today's reflection",
+  "Today's reflection",
+] as const;
+
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
@@ -73,6 +112,30 @@ function isUniqueViolation(error: unknown) {
     "code" in error &&
     (error as { code?: string }).code === "23505"
   );
+}
+
+function formatRelativeTime(value: string) {
+  const diffMs = Date.now() - new Date(value).getTime();
+  const diffMinutes = Math.max(1, Math.round(diffMs / 60_000));
+
+  if (diffMinutes < 60) {
+    return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
+  }
+
+  const diffHours = Math.round(diffMinutes / 60);
+  if (diffHours < 24) {
+    return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+  }
+
+  const diffDays = Math.round(diffHours / 24);
+  return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+}
+
+function formatWeekRangeLabel(weekStart: string, weekEnd: string) {
+  const formatWeekday = (value: string) =>
+    new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(`${value}T12:00:00Z`));
+
+  return `${formatWeekday(weekStart)} -> ${formatWeekday(weekEnd)}`;
 }
 
 async function getLatestIntake(email: string) {
@@ -456,6 +519,7 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
   const circleId = await ensureCircleForUser(user);
   await ensureMembershipsAndMessages(circleId, user);
   const supabase = await getCircleReadClient(email);
+  const intake = await getLatestIntake(email);
 
   const { data: appUser, error: appUserError } = await supabase
     .from("app_users")
@@ -506,25 +570,54 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
   }
 
   const membershipById = new Map(membershipRows.map((membership) => [membership.id, membership]));
+  const timeZone = intake?.timezone ?? user.timezone ?? "UTC";
+  const todayKey = getIsoDateInTimeZone(new Date(), timeZone);
+  const weekStart = intake?.week_start ?? getUpcomingWeekWindow(timeZone).weekStart;
+  const weekEnd = intake?.week_end ?? getUpcomingWeekWindow(timeZone).weekEnd;
+  const weekdayIndex = getWeekdayIndexForTimeZone(new Date(), timeZone);
+  const postedTodayMembershipIds = new Set(
+    (messages ?? [])
+      .filter((message) => getIsoDateInTimeZone(new Date(message.created_at), timeZone) === todayKey)
+      .map((message) => message.membership_id)
+  );
+  const membershipsWithPresence = membershipRows.map((membership) => ({
+    ...membership,
+    hasPostedToday: postedTodayMembershipIds.has(membership.id),
+    isYou: membership.user_id === appUser.id,
+  }));
+  const checkedInTodayCount = membershipsWithPresence.filter((membership) => membership.hasPostedToday).length;
+  const hasPostedToday = postedTodayMembershipIds.has(userMembership.id);
   const mappedMessages = (messages ?? []).map((message, index) => {
     const author = membershipById.get(message.membership_id);
     const tone: "blush" | "porcelain" = index % 2 === 0 ? "blush" : "porcelain";
+    const previous = index > 0 ? (messages ?? [])[index - 1] as MessageRow : null;
+    const groupedWithPrevious =
+      previous != null &&
+      new Date(message.created_at).getTime() - new Date(previous.created_at).getTime() < 45 * 60 * 1000;
     return {
       ...(message as MessageRow),
       authorName: author?.pseudonym ?? "Hidden Bunny",
       accentColor: author?.accent_color ?? "#C75C2A",
+      groupedWithPrevious,
       isOwn: message.membership_id === userMembership.id,
+      relativeTime: formatRelativeTime(message.created_at),
       tone,
     };
   });
 
   return {
     category: circle.category.replaceAll("_", " "),
+    checkedInTodayCount,
+    dayLabel: weekdayPrompts[weekdayIndex],
+    dayNumber: getDayNumberInWeek(weekStart, timeZone),
+    hasPostedToday,
     memberCount: membershipRows.length,
-    memberships: membershipRows,
+    memberships: membershipsWithPresence,
     messages: mappedMessages,
     prompt: dailyPrompt,
+    promptTitle: weekdayPromptTitles[weekdayIndex],
     userMembership,
+    weekRangeLabel: formatWeekRangeLabel(weekStart, weekEnd),
   };
 }
 

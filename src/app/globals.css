@@ -946,6 +946,298 @@ h3 {
   padding: 28px 0 40px;
 }
 
+.circle-room-shell {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 10px 0 24px;
+}
+
+.circle-room-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.circle-room-brand-image {
+  display: block;
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.28));
+}
+
+.circle-settings-link {
+  color: rgba(255, 239, 242, 0.58);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+.circle-room-panel {
+  padding: 24px 22px 18px;
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(19, 15, 19, 0.97), rgba(14, 10, 13, 0.98));
+  color: #fff7f7;
+  box-shadow:
+    0 22px 58px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.circle-room-context {
+  display: grid;
+  gap: 6px;
+}
+
+.circle-room-kicker {
+  margin: 0;
+  color: rgba(255, 239, 242, 0.72);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.circle-room-title {
+  margin: 0;
+  color: #fbf5ee;
+  font-size: clamp(1.9rem, 3vw, 2.45rem);
+  line-height: 1;
+}
+
+.circle-room-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  color: rgba(255, 239, 242, 0.58);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.83rem;
+}
+
+.circle-room-dayline {
+  margin: 6px 0 0;
+  color: #e9c467;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.circle-member-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin-top: 18px;
+}
+
+.circle-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 239, 242, 0.06);
+}
+
+.circle-member-namewrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.circle-member-bunny {
+  color: #e4b246;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+}
+
+.circle-member-name {
+  color: #fbf5ee;
+  font-size: 0.96rem;
+  line-height: 1.35;
+}
+
+.circle-member-status {
+  flex: 0 0 auto;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.circle-member-status-posted {
+  color: rgba(240, 210, 123, 0.92);
+}
+
+.circle-member-status-quiet {
+  color: rgba(255, 239, 242, 0.44);
+}
+
+.circle-composer-card {
+  margin-top: 22px;
+  padding: 18px 18px 16px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.02));
+}
+
+.circle-composer-head h2 {
+  margin: 0;
+  color: #fbf5ee;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.circle-composer-head p {
+  margin: 6px 0 0;
+  color: rgba(255, 239, 242, 0.56);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.circle-composer-form {
+  margin-top: 14px;
+  gap: 14px;
+}
+
+.circle-journal-textarea {
+  min-height: 132px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(255, 239, 242, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.028);
+  color: #fff6f8;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.circle-composer-prompt {
+  display: grid;
+  gap: 4px;
+}
+
+.circle-composer-prompt-label {
+  margin: 0;
+  color: rgba(255, 239, 242, 0.58);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.circle-composer-prompt-body {
+  margin: 0;
+  color: rgba(255, 239, 242, 0.76);
+  line-height: 1.55;
+}
+
+.circle-share-button {
+  margin-top: 2px;
+}
+
+.circle-reflection-card {
+  margin-top: 20px;
+  padding: 18px 18px 16px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 244, 235, 0.97), rgba(248, 238, 231, 0.94));
+  color: #2b1d1d;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.circle-reflection-kicker {
+  margin: 0 0 8px;
+  color: #b37c3b;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.circle-reflection-card h2 {
+  margin: 0;
+  max-width: 28ch;
+  color: #2c1a18;
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+.circle-reflection-card p {
+  margin: 10px 0 0;
+  color: rgba(44, 26, 24, 0.74);
+  line-height: 1.55;
+}
+
+.circle-feed {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.circle-note {
+  max-width: 620px;
+  padding: 14px 16px 15px;
+  border-radius: 22px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+}
+
+.circle-note-grouped {
+  margin-top: -6px;
+}
+
+.circle-note-own {
+  justify-self: end;
+}
+
+.circle-note-peer {
+  justify-self: start;
+}
+
+.circle-note-blush {
+  background: linear-gradient(180deg, #f8e8ea 0%, #f3dde2 100%);
+  color: #2c1d21;
+}
+
+.circle-note-porcelain {
+  background: linear-gradient(180deg, #fffaf6 0%, #f7f0ea 100%);
+  color: #2b201c;
+}
+
+.circle-note-head {
+  display: grid;
+  gap: 2px;
+}
+
+.circle-note-author {
+  margin: 0;
+  color: #7d6d67;
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+
+.circle-note-time {
+  margin: 0;
+  color: rgba(60, 42, 38, 0.48);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.74rem;
+}
+
+.circle-note-body {
+  margin: 8px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.72;
+}
+
+.circle-status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 239, 242, 0.08);
+  color: rgba(255, 239, 242, 0.58);
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 0.78rem;
+}
+
 .circle-brand-ribbon {
   margin: 0 auto 18px;
   width: min(100%, 420px);
@@ -2399,6 +2691,37 @@ h3 {
   .cb-model-card,
   .cb-trust-panel {
     padding: 20px 18px;
+  }
+
+  .circle-room-shell {
+    width: 100%;
+  }
+
+  .circle-room-panel {
+    padding: 20px 16px 16px;
+  }
+
+  .circle-room-meta,
+  .circle-status-strip {
+    gap: 8px 14px;
+  }
+
+  .circle-member-list {
+    grid-template-columns: 1fr;
+  }
+
+  .circle-member-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .circle-note {
+    max-width: 100%;
+  }
+
+  .circle-journal-textarea {
+    min-height: 118px;
   }
 
   .cb-feature-row {
