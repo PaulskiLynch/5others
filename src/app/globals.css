@@ -1048,11 +1048,11 @@ h3 {
   border-radius: 28px;
   border: 1px solid rgba(255, 246, 236, 0.08);
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 44%),
-    linear-gradient(180deg, #211920 0%, #1a1519 100%);
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.07), transparent 46%),
+    linear-gradient(180deg, #2a2028 0%, #221a20 100%);
   color: #fff7f2;
   box-shadow:
-    0 28px 70px rgba(0, 0, 0, 0.2),
+    0 14px 34px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
@@ -1125,8 +1125,7 @@ h3 {
   margin-top: 8px;
   padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(255, 245, 235, 0.08);
-  background: linear-gradient(180deg, rgba(21, 17, 20, 0.72), rgba(21, 17, 20, 0.96));
-  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(34, 27, 33, 0.84), rgba(34, 27, 33, 0.94));
 }
 
 .circle-composer-sticky {
@@ -1599,10 +1598,10 @@ h3 {
 .cb-entry-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(232, 177, 62, 0.14), transparent 26%),
-    radial-gradient(circle at 90% 8%, rgba(255, 227, 160, 0.11), transparent 20%),
-    radial-gradient(circle at bottom center, rgba(126, 92, 32, 0.22), transparent 34%),
-    linear-gradient(180deg, #151014 0%, #1b151a 48%, #161116 100%);
+    radial-gradient(circle at top left, rgba(232, 177, 62, 0.12), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(255, 227, 160, 0.1), transparent 22%),
+    radial-gradient(circle at bottom center, rgba(126, 92, 32, 0.16), transparent 38%),
+    linear-gradient(180deg, #241b23 0%, #221a21 48%, #1c171c 100%);
   color: #f7f1ea;
 }
 
