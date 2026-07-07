@@ -71,15 +71,22 @@ type CircleRow = {
 };
 
 const seededMessages = [
-  "I restarted the walk after missing three days. Today counted because I came back.",
-  "That absolutely counts. Returning is part of the practice, not proof that you failed.",
-  "My tiny version today is shoes on, outside, one block. I can do one block.",
-  "Mine too. I keep needing permission to make it smaller without calling it quitting.",
-  "Five quiet minutes still changes the day for me. Reporting back later helps.",
+  "I restarted my morning walk today. Only twelve minutes, but it counted.",
+  "That counts. A restart is still movement. I am beginning again today too.",
+  "Water first, shoes on second. What's the smallest version of the walk you can do today?",
+  "Mine is just to get outside before lunch. I keep overthinking it when I stay indoors.",
+  "Same. If I make it tiny enough, I usually do it. Five minutes still changes the day.",
 ] as const;
 
-const dailyPrompt =
-  "What is the smallest version of your promise to yourself that still feels honest today?";
+const displayNames = [
+  "Silver Cottontail",
+  "Gentle Cottontail",
+  "Brave Cottontail",
+  "Open Cottontail",
+  "Calm Cottontail",
+] as const;
+
+const dailyPrompt = "What's the smallest version of your walk today?";
 
 const weekdayPrompts = [
   "Last day together. Say what mattered before the circle closes tonight.",
@@ -114,28 +121,41 @@ function isUniqueViolation(error: unknown) {
   );
 }
 
-function formatRelativeTime(value: string) {
-  const diffMs = Date.now() - new Date(value).getTime();
-  const diffMinutes = Math.max(1, Math.round(diffMs / 60_000));
-
-  if (diffMinutes < 60) {
-    return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
-  }
-
-  const diffHours = Math.round(diffMinutes / 60);
-  if (diffHours < 24) {
-    return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
-  }
-
-  const diffDays = Math.round(diffHours / 24);
-  return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+function formatMessageTime(value: string, timeZone: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone,
+  }).format(new Date(value));
 }
 
 function formatWeekRangeLabel(weekStart: string, weekEnd: string) {
-  const formatWeekday = (value: string) =>
-    new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(`${value}T12:00:00Z`));
+  const start = new Date(`${weekStart}T12:00:00Z`);
+  const end = new Date(`${weekEnd}T12:00:00Z`);
+  const startLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(start);
+  const endLabel = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(end);
+  return `${startLabel}-${endLabel}`;
+}
 
-  return `${formatWeekday(weekStart)} -> ${formatWeekday(weekEnd)}`;
+function buildDisplayNameMap(
+  memberships: MembershipRow[],
+  signedInUserId: string
+) {
+  const map = new Map<string, string>();
+  let nextAliasIndex = 0;
+
+  for (const membership of memberships) {
+    if (membership.user_id === signedInUserId) {
+      map.set(membership.id, "You");
+      continue;
+    }
+
+    const alias = displayNames[nextAliasIndex] ?? `Cottontail ${nextAliasIndex + 1}`;
+    map.set(membership.id, alias);
+    nextAliasIndex += 1;
+  }
+
+  return map;
 }
 
 async function getLatestIntake(email: string) {
@@ -570,6 +590,7 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
   }
 
   const membershipById = new Map(membershipRows.map((membership) => [membership.id, membership]));
+  const displayNameByMembershipId = buildDisplayNameMap(membershipRows, appUser.id);
   const timeZone = intake?.timezone ?? user.timezone ?? "UTC";
   const todayKey = getIsoDateInTimeZone(new Date(), timeZone);
   const weekStart = intake?.week_start ?? getUpcomingWeekWindow(timeZone).weekStart;
@@ -596,11 +617,11 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
       new Date(message.created_at).getTime() - new Date(previous.created_at).getTime() < 45 * 60 * 1000;
     return {
       ...(message as MessageRow),
-      authorName: author?.pseudonym ?? "Hidden Bunny",
+      authorName: displayNameByMembershipId.get(message.membership_id) ?? author?.pseudonym ?? "Hidden Bunny",
       accentColor: author?.accent_color ?? "#C75C2A",
       groupedWithPrevious,
       isOwn: message.membership_id === userMembership.id,
-      relativeTime: formatRelativeTime(message.created_at),
+      relativeTime: formatMessageTime(message.created_at, timeZone),
       tone,
     };
   });
@@ -612,7 +633,10 @@ export async function getMyCircleView(email: string): Promise<CircleViewModel> {
     dayNumber: getDayNumberInWeek(weekStart, timeZone),
     hasPostedToday,
     memberCount: membershipRows.length,
-    memberships: membershipsWithPresence,
+    memberships: membershipsWithPresence.map((membership) => ({
+      ...membership,
+      pseudonym: displayNameByMembershipId.get(membership.id) ?? membership.pseudonym,
+    })),
     messages: mappedMessages,
     prompt: dailyPrompt,
     promptTitle: weekdayPromptTitles[weekdayIndex],
