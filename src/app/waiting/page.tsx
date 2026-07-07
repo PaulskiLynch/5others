@@ -34,6 +34,7 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
   const brand = await getRequestBrandKey();
   const formattedWeekStart = formatWeekDate(weekStart) ?? "Next Monday";
   const formattedWeekEnd = formatWeekDate(weekEnd) ?? "That Sunday night";
+  const timezoneLabel = band ?? "UTC+0";
 
   if (brand === "cardiobunny") {
     return (
@@ -53,48 +54,35 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
               </div>
 
               <p className="cb-kicker">You&apos;re in</p>
-              <h1 className="cb-waiting-title">Your circle is getting ready.</h1>
+              <h1 className="cb-waiting-title">Your place is reserved.</h1>
               <p className="cb-waiting-copy">
-                Cardio Bunny circles begin together so nobody is dropped into a half-formed room.
-                This short pause is part of the care.
+                We&apos;re carefully matching you with five other people who are walking a similar
+                path.
               </p>
               <p className="cb-waiting-highlight">
-                We&apos;ll hold your place and match you into this coming week&apos;s circle.
+                Everyone begins together.
               </p>
+              <div className="cb-waiting-body">
+                <p>That means nobody joins halfway through.</p>
+                <p>Nobody feels like an outsider.</p>
+                <p>Everyone starts on the same day.</p>
+                <p>That&apos;s worth waiting for.</p>
+              </div>
 
-              <div className="cb-waiting-steps">
-                <article className="cb-waiting-step">
-                  <div aria-hidden="true" className="cb-waiting-step-icon">
-                    01
-                  </div>
-                  <div>
-                    <h2>We saved your place</h2>
-                    <p>{mode === "supabase" ? "Your intake is safely saved." : "Your intake is in preview mode right now."}</p>
-                  </div>
-                </article>
-                <article className="cb-waiting-step">
-                  <div aria-hidden="true" className="cb-waiting-step-icon">
-                    02
-                  </div>
-                  <div>
-                    <h2>Circles open together</h2>
-                    <p>New matches begin on {formattedWeekStart} so everyone starts with the same rhythm.</p>
-                  </div>
-                </article>
-                <article className="cb-waiting-step">
-                  <div aria-hidden="true" className="cb-waiting-step-icon">
-                    03
-                  </div>
-                  <div>
-                    <h2>Return quietly</h2>
-                    <p>When your session is active, we&apos;ll bring you straight back to your circle.</p>
-                  </div>
-                </article>
+              <div className="cb-waiting-promise">
+                <p className="cb-waiting-promise-title">We&apos;ll hold your place.</p>
+                <p>When your circle opens we&apos;ll bring you straight back.</p>
+              </div>
+
+              <div className="cb-waiting-checklist">
+                <p>✓ Your place is reserved.</p>
+                <p>✓ Your answers have been saved.</p>
+                <p>✓ We&apos;ll let you know when it&apos;s time.</p>
               </div>
             </section>
 
             <aside className="cb-waiting-card">
-              <p className="cb-how-kicker">This week</p>
+              <p className="cb-how-kicker">Your upcoming circle</p>
               <div className="cb-waiting-meta">
                 <div className="cb-waiting-meta-row">
                   <span>Circle opens</span>
@@ -105,23 +93,32 @@ export default async function WaitingPage({ searchParams }: WaitingPageProps) {
                   <strong>{formattedWeekEnd}</strong>
                 </div>
                 <div className="cb-waiting-meta-row">
-                  <span>Rhythm group</span>
-                  <strong>{band ?? "Compatible rhythm grouping"}</strong>
+                  <span>Your time zone</span>
+                  <strong>{timezoneLabel}</strong>
                 </div>
               </div>
 
               <div className="cb-waiting-note">
-                <p className="cb-waiting-note-title">Why the pause?</p>
+                <p className="cb-waiting-note-title">Why everyone starts together</p>
                 <p>
-                  Midweek joiners wait by design. A calm beginning matters more than dropping people
-                  into a room already in motion.
+                  We believe every circle should begin at the same moment.
                 </p>
+                <p>
+                  Starting together means every member feels included from the very first
+                  conversation.
+                </p>
+                <p>No catching up.</p>
+                <p>No joining halfway through.</p>
+                <p>Just six people beginning together.</p>
               </div>
 
-              <div className="cta-row">
-                <Link className="cb-submit button-reset cb-waiting-cta" href="/sign-in?next=/my-circle">
+              <div className="cb-waiting-actions">
+                <Link className="cb-submit button-reset cb-waiting-cta" href="/">
                   <span aria-hidden="true">[]</span>
-                  <span>Open my sign-in</span>
+                  <span>Got it</span>
+                </Link>
+                <Link className="cb-waiting-secondary" href="/">
+                  Return to homepage
                 </Link>
               </div>
             </aside>
