@@ -15,3 +15,5 @@ create table if not exists notification_deliveries (
 
 create index if not exists notification_deliveries_week_idx
   on notification_deliveries (notification_type, week_start, created_at);
+
+alter table public.notification_deliveries enable row level security;

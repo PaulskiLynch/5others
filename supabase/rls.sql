@@ -52,6 +52,7 @@ alter table public.message_reports enable row level security;
 alter table public.check_ins enable row level security;
 alter table public.safety_events enable row level security;
 alter table public.pilot_intake_requests enable row level security;
+alter table public.notification_deliveries enable row level security;
 
 drop policy if exists "app_users_select_own" on public.app_users;
 create policy "app_users_select_own"
